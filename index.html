@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Sportmaat v50 · 2026-11-19 -->
-<html lang="nl"><head><meta charset="utf-8"><meta name="app-version" content="v50">
+<!-- Sportmaat v55 · 2026-11-19 -->
+<html lang="nl"><head><meta charset="utf-8"><meta name="app-version" content="v55">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f2b33"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Sportmaat">
@@ -72,7 +72,11 @@ html,body{background:var(--htmlbg);height:100%;overflow:hidden}
 .pl{position:fixed;inset:0;z-index:40;background:var(--bg);color:#fff}.plc{max-width:640px;width:100%;margin:0 auto;height:100%;display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom))}
 .pltop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.plb{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:8px 0}
 .plim{display:flex;flex-direction:column;gap:6px;width:100%;max-width:420px}.plim img{width:100%;max-height:25vh;object-fit:contain;border-radius:12px;background:rgba(255,255,255,.08)}
+.plim.an{position:relative;height:36vh}.plim.an img{position:absolute;inset:0;width:100%;height:100%;max-height:none;animation:plf 1.6s steps(1,end) infinite}.plim.an img:nth-child(2){animation-name:plg}@keyframes plf{0%{opacity:1}50%{opacity:0}}@keyframes plg{0%{opacity:0}50%{opacity:1}}
 .plb h2{margin:6px 0 0;font-size:24px;overflow-wrap:anywhere}.pl .sub{color:#cfe3de}.plt{font-size:84px;font-weight:800;color:#5fe0c0;line-height:1}.pls{font-size:15px;opacity:.9}.plf{display:flex;flex-direction:column;gap:8px;padding-top:8px}.pl .bar{background:rgba(255,255,255,.18)}
+.rcr{display:flex;align-items:center;gap:6px;margin-top:6px}.rcr>span{width:68px;font-size:12px;flex:none}.rcr>div{display:flex;gap:4px;flex:1}.rcr button{flex:1;min-width:0;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:inherit;border-radius:9px;padding:7px 2px;font:500 11.5px inherit;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rcr button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.gd{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}.gd label{display:flex;align-items:center;gap:3px;margin:0;font-size:14px}
+.yg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.ys{background:var(--mint);border-radius:10px;padding:8px 10px}.ys b{display:block;font-size:16px}.ys span{font-size:12px;color:var(--mut)}
 .wxl:empty{display:none}.wxl .wl{margin-top:8px;padding:8px 10px;border-radius:12px;background:rgba(128,150,150,.18);font-size:13px;line-height:1.35;cursor:pointer}.wxl .wl b{display:block}.wxl .wl span{display:block;opacity:.85;font-size:12px}.wxr{padding:7px 0;border-bottom:1px solid var(--line)}.wxr:last-of-type{border-bottom:0}.cb{position:relative}.cb::after{content:'';position:absolute;inset:-9px}
 .btn.mini{padding:4px 10px;font-size:12px}.it>.mini{margin-left:auto}.tdy>.mini{margin-top:6px}
 .tabs button{font-size:8.5px;gap:1px;padding:0;min-width:0;white-space:nowrap}.tabs button i{height:20px}.tabs button i svg{width:20px;height:20px}
@@ -199,7 +203,7 @@ const OP=()=>Object.assign({},OPD,S.opt||{});
 function setOpt(k,v){S.opt=Object.assign({},S.opt,{[k]:v});save()}
 const THEMES=[{id:'zee',n:'Zee',c1:'#12395a',c2:'#1d8a76',tc:'#12395a'},{id:'blauw',n:'Blauw',c1:'#163b63',c2:'#347fc4',tc:'#163b63'},{id:'grijs',n:'Grijs',c1:'#3a3f44',c2:'#8aa0ad',tc:'#2b2f33'},{id:'zwart',n:'Zwart',c1:'#000',c2:'#1f9c85',tc:'#000000'},{id:'roze',n:'Roze',c1:'#5a1740',c2:'#e0457b',tc:'#2a0a1d'},{id:'goud',n:'Goud',c1:'#4a3a0c',c2:'#d9a521',tc:'#241c05'},{id:'paars',n:'Paars',c1:'#2d1b5a',c2:'#7b4fd0',tc:'#150d2e'},{id:'rood',n:'Rood',c1:'#5a1414',c2:'#c9302c',tc:'#2a0909'}];
 function applyTheme(){try{const t=THEMES.find(x=>x.id===OP().theme)||THEMES[0];document.documentElement.setAttribute('data-th',t.id);const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',t.tc)}catch(e){}}
-const APP_V='v50',DATA_V=6;
+const APP_V='v55',DATA_V=6;
 let S=DEF(),warn=false,SZ=0,lastWarn=0,RTXT='';
 const IDB=(()=>{let db=null;const open=()=>db?Promise.resolve(db):new Promise((res,rej)=>{try{const q=indexedDB.open('sportmaat',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>{db=q.result;res(db)};q.onerror=()=>rej(q.error);q.onblocked=()=>rej(new Error('blocked'))}catch(e){rej(e)}});
  const tx=(m,f)=>open().then(d=>new Promise((res,rej)=>{const t=d.transaction('kv',m),r=f(t.objectStore('kv'));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)}));
@@ -210,7 +214,7 @@ function failToast(){if(Date.now()-lastWarn<60000)return;lastWarn=Date.now();toa
 function persist(){S._app=APP_V;S._v=DATA_V;let js='';try{js=JSON.stringify(S)}catch(e){}SZ=js.length;let ls=false;
  if(js.length<3500000){try{localStorage.setItem(K,js);ls=true}catch(e){}}else{try{localStorage.removeItem(K)}catch(e){}}
  IDB.put('state',S).then(()=>{warn=false}).catch(()=>{if(!ls){warn=true;failToast()}})}
-function save(){persist();render();clearTimeout(BDT);BDT=setTimeout(badgeCheck,900)}
+function save(){persist();render();clearTimeout(BDT);BDT=setTimeout(afterSave,900)}
 async function makeSafety(label){try{const js=JSON.stringify(S);if(!js||js.length<40)return;await IDB.put('bak:'+Date.now(),{at:Date.now(),label,app:S._app||'',size:js.length,json:js});const ks=(await IDB.keys()).filter(x=>String(x).startsWith('bak:')).sort();while(ks.length>5)await IDB.del(ks.shift())}catch(e){}}
 async function boot(){
  try{let d=null;try{d=await Promise.race([IDB.get('state'),new Promise(r=>setTimeout(()=>r(undefined),4000))])}catch(e){}
@@ -222,7 +226,7 @@ async function boot(){
  try{initRoutine()}catch(e){}
  try{periodAuto()}catch(e){}
  try{persist()}catch(e){}
- render();storageCheck();setTimeout(badgeCheck,2500);if(PERX)setTimeout(()=>toast('📅 Je periode is verlengd tot '+fmt(PERX,{day:'numeric',month:'long',year:'numeric'})+'.',null,null,9000),900)}
+ render();storageCheck();setTimeout(afterSave,2500);if(PERX)setTimeout(()=>toast('📅 Je periode is verlengd tot '+fmt(PERX,{day:'numeric',month:'long',year:'numeric'})+'.',null,null,9000),900)}
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const P=s=>{const[a,b,c]=s.split('-');return new Date(+a,b-1,+c)};
 const add=(s,n)=>{const d=P(s);d.setDate(d.getDate()+n);return iso(d)};
@@ -244,7 +248,7 @@ const curRid=ds=>(V.rid&&V.ridFor===ds)?V.rid:dayRid(ds);
 const rtN=(d,rid)=>tickN(d,rid||dayRid(d));
 function items(ds){const a=[],t=(S.swap&&S.swap[ds])||tplFor(ds)[(P(ds).getDay()+6)%7],o=S.td[ds]||{};
  const c=(S.customPlan||{})[ds];
- if(c){if(c.type!=='Rustdag')a.push({id:'t',tpl:1,cust:1,type:c.type||'Hardlopen',title:c.title||'Training uit plan',dur:(c.dur&&!(c.km&&/^\s*[\d.,]+\s*(km|kilometer)\s*$/i.test(c.dur)))?c.dur:(c.note||''),opt:0,done:!!o.done,km:o.km||c.km||'',rpe:o.rpe,note:o.note,time:o.time,hm:o.hm,hr:o.hr})}
+ if(c){if(c.type!=='Rustdag')a.push({id:'t',tpl:1,cust:1,type:c.type||'Hardlopen',title:c.title||'Training uit plan',dur:(c.dur&&!(c.km&&/^\s*[\d.,]+\s*(km|kilometer)\s*$/i.test(c.dur)))?c.dur:(c.note||''),opt:c.opt?1:0,done:!!o.done,km:o.km||c.km||'',rpe:o.rpe,note:o.note,time:o.time,hm:o.hm,hr:o.hr})}
  else if(t.type!=='Rustdag')a.push({id:'t',tpl:1,type:t.type,title:t.title,dur:t.dur,opt:t.opt,done:!!o.done,km:o.km,rpe:o.rpe,note:o.note,time:o.time,hm:o.hm,hr:o.hr});
  (S.ex[ds]||[]).forEach(e=>a.push({...e,tpl:0}));return a}
 function setDone(ds,id,v){if(id==='t'){S.td[ds]={...(S.td[ds]||{}),done:v}}else{const e=S.ex[ds].find(x=>x.id===id);e.done=v}save();const ty=(items(ds).find(y=>y.id===id)||{}).type;if(v&&OP().popup&&!hasData(ds,id)&&!SIMPLE.includes(ty))openSess(ds,id)}
@@ -267,7 +271,7 @@ function heroSvg(){const n=uName().toUpperCase().replace(/&/g,'&amp;').replace(/
  const logo=n?'<text x="200" y="99" text-anchor="middle" '+FF+' font-weight="700" font-size="'+sz+'" letter-spacing="'+(sz>=30?4.5:Math.max(1,sz*.15))+'" fill="#fff">'+n+'</text><text x="200" y="121" text-anchor="middle" '+FF+' font-weight="600" font-size="15" letter-spacing="8" fill="#fff">SPORTMAAT</text>'+spLine(141,9.6)
   :'<text x="200" y="107" text-anchor="middle" '+FF+' font-weight="700" font-size="34" letter-spacing="5.5" fill="#fff">SPORTMAAT</text>'+spLine(131,10.4);
  return HERO.replace('@@LOGO@@',logo)}
-function pHome(){return`<div class="home"><div class="herow">${heroSvg()}${hrLine()}</div><div class="hp">${todayBlock()}${wrBanner()}${goalHome()}${calCard()}</div>${FOOT}</div>`}
+function pHome(){return`<div class="home"><div class="herow">${heroSvg()}${hrLine()}</div><div class="hp">${todayBlock()}${wrBanner()}${rcCard()}${coachHome()}${shoeWarn()}${goalHome()}${calCard()}</div>${FOOT}</div>`}
 function pWeek(){const m=V.week,st=weekStats(m),pc=st.n?Math.round(st.d/st.n*100):0;
  let list=`<div class="row"><span>☀️ Routine</span><b>${st.r}/7</b></div>`;
  for(let i=0;i<7;i++){const ds=add(m,i);items(ds).forEach(x=>{if(!x.opt||x.done)list+=`<div class="row"><span>${ICON[x.type]} ${dn(ds)} ${x.type.toLowerCase()}</span><b>${x.done?1:0}/1</b></div>`})}
@@ -306,11 +310,12 @@ function pPlan(){const m=V.week;let b='';
   b+=weeks.map(x=>{let rows='';for(let i=0;i<7;i++){const ds=add(x,i);if(ds<bd.start||ds>bd.end)continue;const its=items(ds);rows+=`<div class="it"><span style="flex:1"><b>${dn(ds)} ${sd(ds)}</b><small class="sub" style="display:block">${its.length?its.map(y=>`${ICON[y.type]} ${esc(y.title)}${y.dur?' · '+esc(y.dur):''}${y.km?' · '+y.km+' km':''}`).join('<br>'):'🌙 Rustdag'}</small></span><span class="sub">${its.filter(y=>y.done).length}/${its.filter(y=>!y.opt||y.done).length}</span></div>`}return`<div class="card"><button class="hist" onclick="V.week='${x}';V.sub='schema';render()"><span><b>Week ${wk(x)}</b><br><small class="sub">${range(x)}</small></span><span>Bekijk week ›</span></button>${rows}</div>`}).join('')}
  if(V.sub==='invoeren'){const cp=S.customPlan?Object.keys(S.customPlan).sort():[];b+=`<div class="card"><h3>📋 Nieuw trainingsplan plakken</h3>${cp.length?`<div class="ok" style="margin-top:0">Eigen plan actief: ${cp.length} dagen, ${sd(cp[0])} – ${fmt(cp[cp.length-1],{day:'numeric',month:'short',year:'numeric'})}</div>`:''}<p>Plak hieronder je trainingsplan. Een regel per training, bijvoorbeeld:</p><div class="sub" style="line-height:1.8;background:var(--mint);padding:10px;border-radius:10px">2026-11-01 | 10 km | rustige duurloop<br>2026-11-04 | Fietsen | 30 minuten | rustig rondje<br>2026-11-08 | 8 km | herstelweek</div><label style="display:block;margin:12px 0 5px">Jouw nieuwe plan</label><textarea id="planPaste" rows="9" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font:14px inherit" placeholder="Datum | afstand in km | notitie"></textarea><p class="sub">Gebruik per regel een datum (JJJJ-MM-DD) en daarna afstand + notitie, of activiteit | duur/afstand | notitie. Regels uit het plan vervangen op die datum de standaardtraining uit je weekschema. Afvinkingen, ochtendroutine en je eigen trainingen blijven bewaard. Heb je al een eigen plan, dan kies je na het controleren of je het hele plan vervangt of alleen de datums uit je lijst aanpast.</p><button class="btn p big" onclick="previewPlan()">Plan controleren</button><div id="planPreview"></div>${cp.length?`<button class="btn d big" onclick="delPlan()">Eigen plan verwijderen</button>`:''}</div>`}
  if(V.sub==='details'){b+=`<div class="card"><h3>Standaard weekschema</h3><div class="sub">Tik om een dag aan te passen. Geldt voor alle weken.</div>${S.tpl.map((t,i)=>`<div class="row" style="padding:9px 0" onclick="openTpl(${i})"><span>${['Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag','Zondag'][i]}</span><span>${ICON[t.type]} ${t.title} ${t.dur?'· '+t.dur:''} ›</span></div>`).join('')}</div><button class="btn p big" onclick="openSess('${today}')">+ Nieuwe training toevoegen</button>`}
- return head('Trainingsschema','Week '+wk(m)+' · '+range(m),'home')+`<div class="body">${weekNav()}<div class="sg" style="flex-wrap:wrap">${[['schema','Schema'],['periode','Hele plan'],['voortgang','Voortgang'],['invoeren','Nieuw plan'],['details','Details']].map(s=>`<button class="${V.sub===s[0]?'on':''}" onclick="V.sub='${s[0]}';render()">${s[1]}</button>`).join('')}</div>${b}</div>`}
+ if(V.sub==='trainer')b+=coachTab();
+ return head('Trainingsschema','Week '+wk(m)+' · '+range(m),'home')+`<div class="body">${weekNav()}<div class="sg" style="flex-wrap:wrap">${[['schema','Schema'],['trainer','Trainer'],['periode','Hele plan'],['voortgang','Voortgang'],['invoeren','Nieuw plan'],['details','Details']].map(s=>`<button class="${V.sub===s[0]?'on':''}" onclick="V.sub='${s[0]}';render()">${s[1]}</button>`).join('')}</div>${b}</div>`}
 function best(type){const all=[0];Object.keys(S.td).forEach(ds=>{const x=items(ds).find(y=>y.id==='t');if(S.td[ds].done&&x&&x.type===type)all.push(+x.km||0)});
  Object.values(S.ex).flat().forEach(e=>{if(e.done&&e.type===type)all.push(+e.km||0)});return Math.max(...all)}
 function pGoals(){const g=[['Hardlopen','run','🏃'],['Fietsen','bike','🚴']];
- return head('Mijn doelen','Doelen en records','home')+`<div class="body"><button class="btn p big" onclick="openGoal()">+ Doel toevoegen</button>${g.map(([t,k,ic])=>{const b=best(t),pc=Math.min(100,b/S.goals[k]*100);return`<div class="card"><h3>${ic} ${S.goals[k]} km ${t.toLowerCase()}</h3><div class="sub">Langste tot nu toe: ${b} km</div><div class="bar"><div style="width:${pc}%"></div></div><button class="btn" style="margin-top:10px" onclick="setGoal('${k}')">Doel aanpassen</button></div>`}).join('')}${goalCards()}<div class="card"><h3>🏃 Hardlopen per week</h3>${bars(lastWeeks(12),m=>weekKm(m,'Hardlopen'),'km')}</div><div class="card"><h3>🚴 Fietsen per week</h3>${bars(lastWeeks(12),m=>weekKm(m,'Fietsen'),'km')}</div>${records()}${badgeCard()}<div class="card sub">Vul bij een training de kilometers in (tik op de naam in Mijn week) om je doelvoortgang te zien.</div></div>`}
+ return head('Mijn doelen','Doelen en records','home')+`<div class="body"><button class="btn p big" onclick="openGoal()">+ Doel toevoegen</button>${g.map(([t,k,ic])=>{const b=best(t),pc=Math.min(100,b/S.goals[k]*100);return`<div class="card"><h3>${ic} ${S.goals[k]} km ${t.toLowerCase()}</h3><div class="sub">Langste tot nu toe: ${b} km</div><div class="bar"><div style="width:${pc}%"></div></div><button class="btn" style="margin-top:10px" onclick="setGoal('${k}')">Doel aanpassen</button></div>`}).join('')}${goalCards()}${prCard()}${trendCard()}${shoeCard()}${yearCard()}<div class="card"><h3>🏃 Hardlopen per week</h3>${bars(lastWeeks(12),m=>weekKm(m,'Hardlopen'),'km')}</div><div class="card"><h3>🚴 Fietsen per week</h3>${bars(lastWeeks(12),m=>weekKm(m,'Fietsen'),'km')}</div>${records()}${badgeCard()}<div class="card sub">Vul bij een training de kilometers in (tik op de naam in Mijn week) om je doelvoortgang te zien.</div></div>`}
 function setGoal(k){const v=parseFloat(prompt('Nieuw doel in km:',S.goals[k]));if(v>0){S.goals[k]=v;save()}}
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 const STAT=['Actief','Herstellend','Hersteld'];
@@ -338,7 +343,7 @@ function doApplyPlan(mode){const p=window._planPreview;if(!p)return;closeS();con
  else{Object.keys(old).forEach(d=>{if(d<today)np[d]=old[d]});k.forEach(d=>{if(d>=today||!(d in np))np[d]=p[d]});S.period={start:k[0],end:k[k.length-1]}}
  S.customPlan=np;V.sub='periode';save();toast(mode==='merge'?'Trainingen op '+k.length+' datums aangepast.':'Plan vervangen.')}
 function delPlan(){if(confirm('Je geplakte plan verwijderen vanaf vandaag? Dagen uit het verleden, je vaste weekschema en alle afvinkingen blijven bewaard.')){const k={};Object.keys(S.customPlan||{}).forEach(d=>{if(d<today)k[d]=S.customPlan[d]});if(Object.keys(k).length)S.customPlan=k;else delete S.customPlan;save()}}
-function planBounds(){const k=Object.keys(S.customPlan||{}).sort();return k.length?{start:k[0],end:k[k.length-1]}:{start:S.period.start,end:S.period.end}}
+function planBounds(){const cp=S.customPlan||{},k=Object.keys(cp).filter(d=>!(cp[d].coach&&!cp[d].prev)).sort();return k.length?{start:k[0],end:k[k.length-1]}:{start:S.period.start,end:S.period.end}}
 function periodWeeks(){const b=planBounds(),o=[];for(let x=mon(b.start),g=0;x<=mon(b.end)&&g<200;x=add(x,7),g++)o.push(x);return o}
 function pPeriod(){const a=S.period.start,b=S.period.end,end=b<today?b:today,M={};let r=0,d=0,n=0,bike=0,run=0,oth=0,days=0,tt=0,hh=0,hs=0,hn=0;
  for(let ds=a,g=0;ds<=end&&g<1500;ds=add(ds,1),g++){days++;const k=ds.slice(0,7),m=M[k]=M[k]||{r:0,d:0,n:0,km:0};
@@ -363,7 +368,7 @@ function openTimer(i){const e=rtFor(V.rd,curRid(V.rd)).items[i],s=secs(e[1]);if(
 function tmShow(){if(!TM)return;document.getElementById('tm').textContent=TM.left;document.getElementById('tms').textContent=TM.sides>1?'Kant '+TM.side+' van '+TM.sides:'';document.getElementById('tmb').textContent=TM.run?'Pauze':'Start'}
 function tmToggle(){if(!TM)return;unlockBeep();if(TM.run){clearInterval(TM.id);TM.id=0;TM.run=0}else{if(TM.left<=0){TM.left=TM.s;TM.side=1}TM.run=1;TM.id=setInterval(tmTick,1000)}tmShow()}
 function tmTick(){if(!TM)return;TM.left--;if(TM.left<=0){beep();if(TM.side<TM.sides){TM.side++;TM.left=TM.s}else{clearInterval(TM.id);TM.id=0;TM.run=0;TM.left=0;document.getElementById('tm').textContent=0;document.getElementById('tms').textContent='Klaar ✓';document.getElementById('tmb').textContent='Opnieuw';return}}tmShow()}
-function toast(t,fn,lbl,ms){const o=document.createElement('div');o.className='toast';o.innerHTML=t+(fn?' <button>'+(lbl||'Ongedaan maken')+'</button>':'');if(fn)o.querySelector('button').onclick=()=>{fn();o.remove()};document.body.append(o);setTimeout(()=>o.remove(),ms||6000)}
+function toast(t,fn,lbl,ms){document.querySelectorAll('.toast').forEach(x=>x.remove());const o=document.createElement('div');o.className='toast';o.innerHTML=t+(fn?' <button>'+(lbl||'Ongedaan maken')+'</button>':'');if(fn)o.querySelector('button').onclick=()=>{fn();o.remove()};document.body.append(o);setTimeout(()=>o.remove(),ms||6000)}
 const spd=x=>{const k=parseFloat(String(x.km||'').replace(',','.')),t=parseFloat(x.time);return k>0&&t>0?Math.round(k/(t/60)*10)/10:0};
 const meta=x=>(x.time?' · '+x.time+' min':'')+(spd(x)?' · '+spd(x)+' km/u':'')+(x.hm?' · '+x.hm+' hm':'')+(x.hr?' · ♥ '+x.hr:'');
 const isOk=ds=>{const it=items(ds);return full(ds)||it.some(x=>x.done)};
@@ -503,7 +508,7 @@ async function applyRoutine(text){let d;try{d=JSON.parse(text)}catch(e){alert('D
 function importRoutine(inp){const f=inp.files&&inp.files[0];if(!f)return;if(f.size>30e6){alert('Dit bestand is te groot.');return}const r=new FileReader();r.onload=()=>applyRoutine(r.result);r.readAsText(f)}
 function settingsCard(){const o=OP(),row=(on,f,t)=>`<div class="it" style="padding:6px 0">${cb(on,f)}<span>${t}</span></div>`,rg=(k,v,t)=>`<button class="${o[k]===v?'on':''}" onclick="setOpt('${k}',${v})">${t}</button>`;
  return`<div class="card"><button class="sethd" onclick="V.setOpen=!V.setOpen;render()"><b>⚙️ Instellingen</b><span>${V.setOpen?'▾':'▸'}</span></button>${V.setOpen?`<label class="sl">Naam in de app (staat bovenaan Home)</label><input class="si" value="${esc(uName())}" maxlength="20" placeholder="bijv. je voornaam" onchange="setName(this.value)"><label class="sl">De 3 sporten onder de naam (tik erop op Home om een training in te voeren)</label>${spList().map((x,i)=>`<div style="display:flex;gap:6px;margin-bottom:6px"><input class="si" style="flex:1;margin:0" value="${esc(x.n)}" maxlength="16" placeholder="Naam" onchange="setSp(${i},'n',this.value)"><select class="si" style="flex:1;margin:0" onchange="setSp(${i},'t',this.value)">${opts(TYPES.filter(q=>q!=='Rustdag'),x.t)}</select></div>`).join('')}<div class="sub">Kleurstelling</div><div class="sw">${THEMES.map(t=>`<button class="swb${o.theme===t.id?' on':''}" onclick="setOpt('theme','${t.id}')"><i style="background:linear-gradient(135deg,${t.c1} 50%,${t.c2} 50%)"></i>${t.n}</button>`).join('')}</div>
- <label class="sl">Plaats voor het weeradvies (droog tijdvak voor buitentrainingen)</label><div style="display:flex;gap:6px"><input class="si" id="f_city" style="flex:1;margin:0" value="${esc(o.city)}" placeholder="Plaatsnaam" onkeydown="if(event.key==='Enter')findCity()"><button class="btn" onclick="findCity()">Zoek</button></div><div class="sub" id="f_cs">Nu: ${esc(o.city)} (${(+o.lat).toFixed(2)}, ${(+o.lon).toFixed(2)})</div><div class="sub" id="f_ws" style="margin-top:4px">${wxStatus()}</div><button class="btn" style="margin:6px 0" onclick="wxEnsure(true)">Weer nu ophalen</button>${row(o.wx!==false,`setOpt('wx',${o.wx===false})`,'Weeradvies tonen op Home en Week')}
+ <label class="sl">Plaats voor het weeradvies (droog tijdvak voor buitentrainingen)</label><div style="display:flex;gap:6px"><input class="si" id="f_city" style="flex:1;margin:0" value="${esc(o.city)}" placeholder="Plaatsnaam" onkeydown="if(event.key==='Enter')findCity()"><button class="btn" onclick="findCity()">Zoek</button></div><div class="sub" id="f_cs">Nu: ${esc(o.city)} (${(+o.lat).toFixed(2)}, ${(+o.lon).toFixed(2)})</div><div class="sub" id="f_ws" style="margin-top:4px">${wxStatus()}</div><button class="btn" style="margin:6px 0" onclick="wxEnsure(true)">Weer nu ophalen</button>${row(o.wx!==false,`setOpt('wx',${o.wx===false})`,'Weeradvies tonen op Home en Week')}${row(o.rc!==false,`setOpt('rc',${o.rc===false})`,'Herstelcheck op Home (hoe voel je je vandaag?)')}<div class="sub" style="margin:8px 0 4px">Virtuele trainer</div><div class="sg">${[['advies','Alleen advies'],['schema','Schema aanpassen'],['uit','Uit']].map(q=>`<button class="${CM()===q[0]?'on':''}" onclick="setCoach('${q[0]}')">${q[1]}</button>`).join('')}</div>
  ${RIDS.map((q,i)=>`<label class="sl">Naam routine ${i+1}</label><input class="si" value="${esc(nm0(q))}" maxlength="40" onchange="setRName('${q}',this.value)">`).join('')}
  ${row(o.hr,`setOpt('hr',${!o.hr})`,'Hartslaglijn op Home tonen')}
  <div class="sub" style="margin:6px 0 4px">Hartslaglijn gebaseerd op</div><div class="sg">${rg('hrDays',92,'3 mnd')}${rg('hrDays',183,'6 mnd')}${rg('hrDays',366,'1 jaar')}${rg('hrDays',99999,'Alles')}</div>
@@ -562,12 +567,26 @@ function durMin(x){const s=String(x.dur||''),R='(\\d+(?:[.,]\\d+)?)(?:\\s*[–-]
  if(m){const v=num(m[2]||m[1]);return Math.round(/^min/i.test(m[3])?v:v*60)}
  m=s.match(new RegExp(R+'km','i'));if(m)return Math.round(num(m[2]||m[1])*(x.type==='Fietsen'?2.5:x.type==='Wandelen'?12:6));
  return x.type==='Fietsen'?90:60}
+/* duur inschatten op basis van je eigen geschiedenis */
+let ESTC=null,ESTT=0;
+function estHist(ty){if(!ESTC||Date.now()-ESTT>5000){ESTC={};ESTT=Date.now();new Set([...Object.keys(S.td),...Object.keys(S.ex)]).forEach(ds=>{if(ds>today)return;items(ds).forEach(y=>{const t=num(y.time);if(!y.done||!(t>0))return;(ESTC[y.type]=ESTC[y.type]||[]).push({ds,t,km:num(y.km)||0})})});for(const k in ESTC)ESTC[k].sort((a,b)=>a.ds<b.ds?1:-1)}return(ESTC[ty]||[]).slice(0,12)}
+const med=a=>{const b=[...a].sort((x,y)=>x-y),n=b.length;return n?(n%2?b[(n-1)/2]:(b[n/2-1]+b[n/2])/2):0};
+function estMin(x){const s=String(x.dur||''),R='(\\d+(?:[.,]\\d+)?)(?:\\s*[–-]\\s*(\\d+(?:[.,]\\d+)?))?\\s*';
+ if(new RegExp(R+'(min|uur|u\\b)','i').test(s))return{m:durMin(x),src:'plan'};
+ const H=estHist(x.type),km=num(x.km)||(()=>{const m=s.match(new RegExp(R+'km','i'));return m?num(m[2]||m[1]):0})();
+ if(km){const P=H.filter(h=>h.km>0).map(h=>h.t/h.km);if(P.length>=2)return{m:Math.round(km*med(P)),src:'je tempo',n:P.length};return{m:durMin(x),src:'schatting'}}
+ if(H.length>=2)return{m:Math.round(med(H.map(h=>h.t))),src:'je vorige keren',n:H.length};
+ return{m:durMin(x),src:'schatting'}}
+const fmin=m=>m<60?m+' min':Math.floor(m/60)+'u'+(m%60?String(m%60).padStart(2,'0'):'');
+const hmm=v=>{const h=Math.floor(v),mi=Math.round((v-h)*60);return String(h+(mi===60?1:0)).padStart(2,'0')+':'+String(mi===60?0:mi).padStart(2,'0')};
+const wxRange=r=>r.min?hh(r.s)+'–'+hmm(r.s+r.min/60):hh(r.s)+'–'+hh(r.e);
+const wxDur=r=>r.min?`<span>⏱️ Duurt ± ${fmin(r.min)} (${r.src==='plan'?'volgens plan':r.src==='schatting'?'schatting':'o.b.v. '+r.src})</span>`:'';
 function wxSlot(ds,x){const W=wxData();if(!W)return null;const H=W.h,di=W.d.time.indexOf(ds);if(di<0)return null;
  const idx={};H.time.forEach((t,i)=>{if(t.slice(0,10)===ds)idx[+t.slice(11,13)]=i});
  const hm=t=>{const a=t.slice(11,16).split(':');return+a[0]+(+a[1])/60};
  let h0=Math.max(6,Math.ceil(hm(W.d.sunrise[di]))),h1=Math.min(21,Math.floor(hm(W.d.sunset[di])));
  if(ds===today){const n=new Date();h0=Math.max(h0,Math.ceil(n.getHours()+n.getMinutes()/60))}
- const len=Math.max(1,Math.ceil(durMin(x)/60));if(h1-h0<len)return{late:1};
+ const es=estMin(x),len=Math.max(1,Math.ceil(es.m/60));if(h1-h0<len)return{late:1,min:es.m,src:es.src};
  const g=(a,h)=>{const i=idx[h];return i==null||!a||a[i]==null?null:a[i]};
  let best=null;
  for(let s=h0;s+len<=h1;s++){let sum=0,pr=0,tp=0,wd=0,n=0,ok=1;
@@ -575,7 +594,7 @@ function wxSlot(ds,x){const W=wxData();if(!W)return null;const H=W.h,di=W.d.time
   if(!ok)continue;tp/=n;wd/=n;
   const sc=sum*100+pr*.5+(x.type==='Fietsen'?Math.max(0,wd-15):Math.max(0,wd-25)*.5)+(tp<3?(3-tp)*2:0)+(tp>26?(tp-26)*3:0)+Math.abs(s+len/2-12)*.2;
   if(!best||sc<best.sc)best={s,e:s+len,sum,pr,t:tp,w:wd,sc,code:g(H.weather_code,s+Math.ceil(len/2))}}
- if(!best)return null;
+ if(!best)return null;best.min=es.m;best.src=es.src;
  best.k=best.sum<.1&&best.pr<=30?'dry':best.sum<=.5&&best.pr<=50?'near':'wet';
  const dry=h=>{const p=g(H.precipitation,h),q=g(H.precipitation_probability,h);return p!=null&&p<=.1&&(q||0)<=40};
  if(best.k!=='wet'){let a=best.s+1,b=best.e;while(a-2>=h0&&dry(a-1))a--;while(b+1<=h1&&dry(b+1))b++;if(b-(a-1)>best.e-best.s)best.run=[a-1,b]}
@@ -586,19 +605,31 @@ function wxKled(r,ty){const fl=r.t-Math.max(0,r.w-10)*.15-(ty==='Fietsen'?3:0),a
  return'👕 '+a+(x.length?' · '+x.join(' · '):'')}
 const wxTxt=r=>`${wxIc(r.code)} ${r.k==='dry'?'droog':r.k==='near'?'vrijwel droog':'nat'} · ${Math.round(r.t)}° · wind ${BFT(r.w)} Bft`+(r.sum>=.1?' · '+mm(r.sum):'');
 function wxCands(from,n){const o=[];for(let i=0;i<n;i++){const ds=add(from,i);items(ds).forEach(x=>{if(!x.done&&OUTD.includes(x.type))o.push({ds,x})})}return o}
+
+/* weer per dag (ook voor binnensporten) */
+function wxDay(ds){const W=wxData();if(!W)return null;const H=W.h;let lo=99,hi=-99,sum=0,pr=0,w=0,n=0,code=null;
+ H.time.forEach((t,i)=>{if(t.slice(0,10)!==ds)return;const h=+t.slice(11,13);if(h<8||h>20)return;const tp=H.temperature_2m[i];if(tp==null)return;lo=Math.min(lo,tp);hi=Math.max(hi,tp);sum+=H.precipitation[i]||0;pr=Math.max(pr,H.precipitation_probability[i]||0);w+=H.wind_speed_10m[i]||0;n++;if(h===13||code==null)code=H.weather_code[i]});
+ return n?{lo,hi,sum,pr,w:w/n,code:code||0}:null}
+const wxDayTxt=d=>`${wxIc(d.code)} ${Math.round(d.lo)}–${Math.round(d.hi)}° · ${d.sum>=.1?mm(d.sum)+' regen':'droog'} · wind ${BFT(d.w)} Bft`;
+function wxCandsAll(from,n){const o=[];for(let i=0;i<n;i++){const ds=add(from,i);items(ds).forEach(x=>{if(!x.done)o.push({ds,x})})}return o}
+
 function wxHomeHtml(){if(!wxOn()||!wxData())return'';let h='',n=0;
- for(const c of wxCands(today,7)){const r=wxSlot(c.ds,c.x);if(!r||r.late)continue;const dl=c.ds===today?'Vandaag':dn(c.ds);
-  const tn=c.x.type.toLowerCase()+(c.x.opt?' (optioneel)':'');h+=`<div class="wl"><b>${r.k==='wet'?'☔ '+dl+': geen droog tijdvak voor '+tn:ICON[c.x.type]+' '+dl+': '+tn+' om '+hh(r.s)+'–'+hh(r.e)}</b><span>${r.k==='wet'?'minst nat '+hh(r.s)+'–'+hh(r.e)+' · '+wxTxt(r):wxTxt(r)+(r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):'')}</span><span>${wxKled(r,c.x.type)}</span></div>`;
-  if(++n>=2)break}
+ for(const c of wxCandsAll(today,7)){const dl=c.ds===today?'Vandaag':dn(c.ds);
+  if(!OUTD.includes(c.x.type)){const d=wxDay(c.ds);if(!d)continue;h+=`<div class="wl"><b>${ICON[c.x.type]||'🏅'} ${dl}: ${esc(c.x.title||c.x.type)}${c.x.opt?' (optioneel)':''}</b><span>${wxDayTxt(d)}</span></div>`;if(++n>=3)break;continue}
+  const r=wxSlot(c.ds,c.x);if(!r||r.late)continue;
+  const tn=c.x.type.toLowerCase()+(c.x.opt?' (optioneel)':'');h+=`<div class="wl"><b>${r.k==='wet'?'☔ '+dl+': geen droog tijdvak voor '+tn:ICON[c.x.type]+' '+dl+': '+tn+' om '+wxRange(r)}</b><span>${r.k==='wet'?'minst nat '+wxRange(r)+' · '+wxTxt(r):wxTxt(r)+(r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):'')}</span><span>${wxKled(r,c.x.type)}</span>${wxDur(r)}</div>`;
+  if(++n>=3)break}
  return h+wxSwapHtml()}
 function wxWeekHtml(m){if(!wxOn())return'';const W=wxData();
  if(!W)return WXERR?`<div class="card sub">🌦️ Weeradvies is nu niet beschikbaar. ${esc(WXERR)}<button class="btn" style="display:block;margin-top:8px" onclick="wxEnsure(true)">Opnieuw proberen</button></div>`:'';
  let rows='';for(let i=0;i<7;i++){const ds=add(m,i);if(ds<today||W.d.time.indexOf(ds)<0)continue;
-  items(ds).forEach(x=>{if(x.done||!OUTD.includes(x.type))return;const r=wxSlot(ds,x);if(!r)return;const t=`<b>${dn(ds)} ${sd(ds)}</b> · ${ICON[x.type]} ${esc(x.title)}`;
+  items(ds).forEach(x=>{if(x.done)return;const t=`<b>${dn(ds)} ${sd(ds)}</b> · ${ICON[x.type]||'🏅'} ${esc(x.title)}`;
+   if(!OUTD.includes(x.type)){const d=wxDay(ds);if(d)rows+=`<div class="wxr"><div class="row"><span>${t}</span></div><div class="sub">${wxDayTxt(d)}</div></div>`;return}
+   const r=wxSlot(ds,x);if(!r)return;
    rows+=r.late?`<div class="wxr"><div class="row"><span>${t}</span></div><div class="sub">Vandaag niet meer mogelijk voor het donker wordt.</div></div>`
-   :`<div class="wxr"><div class="row"><span>${t}</span><b>${r.k==='wet'?'☔ geen droog uur':hh(r.s)+'–'+hh(r.e)}</b></div><div class="sub">${r.k==='wet'?'minst nat '+hh(r.s)+'–'+hh(r.e)+' · ':''}${wxTxt(r)}${r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):''}</div><div class="sub">${wxKled(r,x.type)}</div></div>`})}
+   :`<div class="wxr"><div class="row"><span>${t}</span><b>${r.k==='wet'?'☔ geen droog uur':wxRange(r)}</b></div><div class="sub">${r.k==='wet'?'minst nat '+wxRange(r)+' · ':''}${wxTxt(r)}${r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):''}</div><div class="sub">${wxKled(r,x.type)}</div>${r.min?`<div class="sub">${wxDur(r).replace(/<\/?span>/g,"")}</div>`:""}</div>`})}
  const d=new Date(W.t),up=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
- return`<div class="card"><h3>🌦️ Droog sporten</h3>${rows||'<div class="sub">Geen buitentraining gepland in deze week, of nog buiten het weerbereik (7 dagen).</div>'}${wxSwapHtml(m)}<div class="sub" style="margin-top:8px;font-size:11px">Weer voor ${esc(wxLoc().name)} · bron Open-Meteo.com · bijgewerkt ${up}</div></div>`}
+ return`<div class="card"><h3>🌦️ Weer bij je trainingen</h3>${rows||'<div class="sub">Geen training gepland in deze week, of nog buiten het weerbereik (7 dagen).</div>'}${wxSwapHtml(m)}<div class="sub" style="margin-top:8px;font-size:11px">Weer voor ${esc(wxLoc().name)} · bron Open-Meteo.com · bijgewerkt ${up}</div></div>`}
 function wxStatus(){if(!wxOn())return'';const W=wxData();if(W){const d=new Date(W.t);return'Weer bijgewerkt om '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+'.'}return WXBUSY?'Weer ophalen…':WXERR?'Weer niet beschikbaar: '+WXERR:'Weer nog niet opgehaald.'}
 function wxPaint(){const h=document.getElementById('wxh'),w=document.getElementById('wxw'),t=document.getElementById('f_ws');if(t)t.textContent=wxStatus();if(h)h.innerHTML=wxHomeHtml();if(w)w.innerHTML=wxWeekHtml(V.week)}
 async function findCity(){const i=document.getElementById('f_city'),e=document.getElementById('f_cs'),q=(i&&i.value||'').trim();if(!e)return;if(q.length<2){e.textContent='Typ een plaatsnaam.';return}
@@ -621,7 +652,7 @@ function wxSwap(){if(!wxOn()||!wxData())return null;
   if(best)return{a:c.ds,x:c.x,b:best.b,rb:best.rb,pb:best.pb}}
  return null}
 function wxSwapHtml(m){const q=wxSwap();if(!q)return'';if(m&&(q.a<m||q.a>=add(m,7)))return'';const tn=q.x.type.toLowerCase(),db=dlb(q.b).toLowerCase();
- return`<div class="wl sw"><b>🔁 ${dlb(q.a)} is nat, ${db} wordt droog</b><span>Verplaats ${tn} naar ${db} (${hh(q.rb.s)}–${hh(q.rb.e)}). ${q.pb.type==='Rustdag'?dlb(q.a)+' wordt dan je rustdag.':'Dan doe je '+esc(String(q.pb.title).toLowerCase())+' op '+dlb(q.a).toLowerCase()+'.'}</span><button class="btn mini" onclick="event.stopPropagation();doSwap('${q.a}','${q.b}')">Verplaats</button></div>`}
+ return`<div class="wl sw"><b>🔁 ${dlb(q.a)} is nat, ${db} wordt droog</b><span>Verplaats ${tn} naar ${db} (${wxRange(q.rb)}). ${q.pb.type==='Rustdag'?dlb(q.a)+' wordt dan je rustdag.':'Dan doe je '+esc(String(q.pb.title).toLowerCase())+' op '+dlb(q.a).toLowerCase()+'.'}</span><button class="btn mini" onclick="event.stopPropagation();doSwap('${q.a}','${q.b}')">Verplaats</button></div>`}
 function doSwap(a,b){const old=JSON.stringify(S.swap||{}),pa=planOf(a),pb=planOf(b);S.swap=Object.assign({},S.swap);S.swap[a]=Object.assign({},pb);S.swap[b]=Object.assign({},pa);save();toast('🔁 Verplaatst naar '+dlb(b).toLowerCase(),()=>{S.swap=JSON.parse(old);save()},null,9000)}
 
 /* ===== Routine afspelen: stap voor stap met timer ===== */
@@ -630,7 +661,8 @@ const plSides=e=>/per (kant|been)/i.test(e[1])?2:1;
 async function plWake(on){try{if(on){if(navigator.wakeLock&&!WL)WL=await navigator.wakeLock.request('screen')}else if(WL){const w=WL;WL=null;await w.release()}}catch(e){WL=null}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&PL){WL=null;plWake(1)}});
 const plSig=()=>PL.ph+'|'+PL.i+'|'+PL.side;
-function plStart(){const ds=V.rd,rid=curRid(ds),L=rtFor(ds,rid).items;if(!L.length)return;const r=S.rt[ds]||[];let i=L.findIndex(e=>!r.includes(e[3]));if(i<0)i=0;unlockBeep();
+function plStart(){try{plStart0()}catch(e){PL=null;const o=document.getElementById('ov');o&&o.remove();toast('Afspelen lukte niet: '+(e&&e.message||e))}}
+function plStart0(){const ds=V.rd,rid=curRid(ds),L=rtFor(ds,rid).items;if(!L.length)return;const r=S.rt[ds]||[];let i=L.findIndex(e=>!r.includes(e[3]));if(i<0)i=0;unlockBeep();
  PL={ds,rid,L,i,ph:'ready',left:0,end:0,side:1,sides:1,s:0,id:0};plGo(i,false);plWake(1);const o=document.createElement('div');o.className='pl';o.id='ov';document.body.append(o);plDraw()}
 function plGo(i,auto){const Q=PL;clearInterval(Q.id);Q.id=0;Q.i=i;const e=Q.L[i];Q.s=secs(e[1]);Q.sides=plSides(e);Q.side=1;Q.left=Q.s;
  if(Q.s&&auto){Q.ph='prep';Q.left=5;Q.end=Date.now()+5000;Q.id=setInterval(plTick,250)}else Q.ph='ready'}
@@ -657,7 +689,7 @@ function plDraw(){const o=document.getElementById('ov');if(!o||!PL)return;const 
  lab=ph==='ready'?(Q.s?'▶ Start':'✓ Klaar'):ph==='run'?'⏸ Pauze':ph==='pause'?'▶ Verder':'Nu starten',
  mid=ph==='prep'?`<div class="pls">Maak je klaar…</div><div class="plt">${Q.left}</div>`:Q.s&&ph!=='after'?`${Q.sides>1&&ph!=='ready'?`<div class="pls">Kant ${Q.side} van ${Q.sides}</div>`:''}<div class="plt">${ph==='ready'?Q.s:Q.left}</div>`:ph==='after'?`<div class="pls">Set gedaan ✓ (${getSets(Q.ds,e[3])}×)</div>`:'';
  o.innerHTML=`<div class="plc"><div class="pltop"><b>${Q.i+1} / ${n}</b><button class="btn" onclick="plClose()">✕ Stop</button></div><div class="bar"><div style="width:${pc}%"></div></div>
- <div class="plb">${im.length?`<div class="plim">${im.map(x=>`<img src="${imgSrc(x)}" alt="">`).join('')}</div>`:`<div style="font-size:90px">${e[2]}</div>`}<h2>${esc(e[0])}</h2><div class="sub">${esc(e[1])}</div>${mid}</div>
+ <div class="plb">${im.length?`<div class="plim${im.length>1?' an':''}">${im.map((x,k)=>`<img src="${imgSrc(x)}" alt="" style="${im.length>1?'animation-delay:'+(k?'0s':'0s')+';':''}">`).join('')}</div>`:`<div style="font-size:90px">${e[2]}</div>`}<h2>${esc(e[0])}</h2><div class="sub">${esc(e[1])}</div>${mid}</div>
  <div class="plf">${ph==='after'?`<button class="btn p big" onclick="plMore()">Nog een set</button><button class="btn big" onclick="plNext(true)">Volgende ›</button>`:`<button class="btn p big" onclick="plBtn()">${lab}</button><div style="display:flex;gap:8px"><button class="btn big" style="flex:1" onclick="plPrev()">‹ Vorige</button><button class="btn big" style="flex:1" onclick="plNext(true)">Overslaan ›</button></div>`}</div></div>`}
 
 /* ===== Mijlpalen (badges) ===== */
@@ -704,6 +736,151 @@ function wrHide(m){S.wrSeen=m;save()}
 /* ===== Doelen op Home ===== */
 function goalHome(){const L=(S.goalList||[]).map(g=>({g,v:Math.round(goalVal(g)*10)/10})).sort((a,b)=>(a.v>=a.g.target)-(b.v>=b.g.target)).slice(0,3);if(!L.length)return'';
  return`<div class="card" onclick="go('goals')" style="cursor:pointer"><h3>🎯 Doelen</h3>${L.map(({g,v})=>{const pc=Math.min(100,g.target>0?v/g.target*100:0);return`<div class="gh"><div class="row"><span>${g.type==='Alle'?'🎯':(ICON[g.type]||'🎯')} ${esc(goalName(g))}</span><b>${v>=g.target?'🏆':fk(v)+'/'+fk(g.target)+' '+GM[g.metric][1]}</b></div><div class="bar"><div style="width:${pc}%"></div></div></div>`}).join('')}</div>`}
+/* ===== Herstelcheck ===== */
+const RCQ=[['sl','Slaap',['😫 slecht','😐 matig','😴 goed']],['en','Energie',['🪫 laag','🙂 oké','⚡ veel']],['sp','Spierpijn',['🔥 veel','😕 beetje','💪 geen']]];
+const rcGet=ds=>(S.rc||{})[ds]||{};
+const rcScore=ds=>{const r=rcGet(ds);return RCQ.every(q=>r[q[0]]!=null)?RCQ.reduce((s,q)=>s+r[q[0]],0):null};
+const rcAdv=sc=>sc==null?'':sc>=5?'💚 Goed hersteld: train volgens plan.':sc>=3?'💛 Matig hersteld: houd het vandaag wat lichter (zwaarte 4–5 van 10).':'❤️ Slecht hersteld: neem rust of doe alleen de routine of een korte wandeling.';
+function rcSet(k,v){S.rc=Object.assign({},S.rc);S.rc[today]=Object.assign({},S.rc[today],{[k]:v});save()}
+function rcCard(){if(OP().rc===false)return'';const sc=rcScore(today),r=rcGet(today);
+ if(sc!=null&&!V.rcEdit)return`<div class="card"><div class="row"><b>🫶 Herstelcheck</b><button class="btn mini" onclick="V.rcEdit=1;render()">Wijzig</button></div><div class="sub">${rcAdv(sc)}</div></div>`;
+ return`<div class="card"><b>🫶 Hoe voel je je vandaag?</b>${RCQ.map(q=>`<div class="rcr"><span>${q[1]}</span><div>${q[2].map((t,i)=>`<button class="${r[q[0]]===i?'on':''}" onclick="rcSet('${q[0]}',${i})">${t}</button>`).join('')}</div></div>`).join('')}${sc!=null?`<div class="sub" style="margin-top:6px">${rcAdv(sc)}</div><button class="btn mini" style="margin-left:0" onclick="V.rcEdit=0;render()">Klaar</button>`:''}</div>`}
+
+/* ===== Virtuele trainer ===== */
+const CM=()=>OP().coach||'advies';
+function cWin(a,b){let n=0,d=0;const rp=[];for(let ds=a;ds<b;ds=add(ds,1))items(ds).forEach(x=>{if(!x.opt||x.done)n++;if(x.done){d++;const r=num(x.rpe);if(r>0)rp.push(r)}});return{n,d,rpe:rp.length?rp.reduce((s,v)=>s+v,0)/rp.length:null}}
+function coachEval(){const m=mon(today),w=cWin(add(m,-14),m),c=w.n?w.d/w.n:null,inj=(S.inj||[]).filter(x=>x.status!=='Hersteld'),ij=inj.reduce((a,x)=>!a||x.sev>a.sev?x:a,null),
+ wi=Math.round((P(m)-P(mon(S.period.start)))/6048e5),dl=wi>=0&&wi%4===3,k1=weekKm(add(m,-7),'Hardlopen'),k2=weekKm(add(m,-14),'Hardlopen'),ramp=k2>0&&k1>k2*1.1,sc=rcScore(today),R=[];let lv,f;
+ if(ij&&ij.sev>=5){lv='blessure';f=.7;R.push(`🩹 ${esc(ij.part)} (pijn ${ij.sev}/10): niet hardlopen. Kies fietsen of zwemmen en houd het licht.`)}
+ else if(dl){lv='herstel';f=.7;R.push('🔄 Elke 4e week is een herstelweek: ongeveer 30% minder, zodat je lichaam sterker wordt.')}
+ else if(ij){lv='voorzichtig';f=.85;R.push(`🩹 ${esc(ij.part)} (pijn ${ij.sev}/10): iets minder en rustig tempo. Stop als de pijn toeneemt.`)}
+ else if((c!=null&&w.n>=2&&c<.5)||(w.rpe!=null&&w.rpe>=8)){lv='rustig';f=.85;if(c!=null&&w.n>=2&&c<.5)R.push(`📉 Afgelopen 2 weken ${w.d} van ${w.n} trainingen gedaan: eerst weer ritme opbouwen.`);if(w.rpe!=null&&w.rpe>=8)R.push(`🥵 Je trainingen voelden zwaar (gemiddeld ${fk(w.rpe)}/10): even gas terug.`)}
+ else if(c!=null&&w.n>=2&&c>=.85&&(w.rpe==null||w.rpe<=6.5)&&!ramp){lv='op';f=1.1;R.push(`📈 ${w.d} van ${w.n} trainingen gedaan${w.rpe!=null?' en het voelde goed ('+fk(w.rpe)+'/10)':''}: je kunt ongeveer 10% meer aan.`)}
+ else{lv='gelijk';f=1;if(ramp)R.push('⚠️ Je kilometers stegen vorige week al flink: deze week gelijk houden.');else if(c!=null&&w.n)R.push(`✅ ${w.d} van ${w.n} trainingen gedaan: houd dit niveau vast.`);else R.push('Nog weinig gegevens: volg je plan en vul na elke training in hoe zwaar het was.')}
+ if(w.rpe==null&&w.d>=2)R.push('💡 Vul bij je trainingen in hoe zwaar het was (1–10), dan wordt het advies beter.');
+ return{lv,f,R,sc,ij}}
+const CLV={op:['📈','Opbouwen'],gelijk:['➡️','Niveau vasthouden'],rustig:['🐢','Rustiger aan'],herstel:['🔄','Herstelweek'],voorzichtig:['🩹','Voorzichtig'],blessure:['🩹','Blessure: aangepast']};
+const CRPE={op:'6–7',gelijk:'5–6',rustig:'4–5',herstel:'3–4',voorzichtig:'4–5',blessure:'3–4'};
+const rk=(v,ty)=>ty==='Zwemmen'?Math.max(.1,Math.round(v*10)/10):v<20?Math.max(1,Math.round(v*2)/2):Math.round(v/5)*5;
+function scaleDur(d,f,ty){return String(d||'').replace(/(\d+(?:[.,]\d+)?)(\s*[–-]\s*)?(\d+(?:[.,]\d+)?)?(\s*)(km|kilometer|minuten|min|uur|u\b)/gi,(al,a,sep,b,sp,u)=>{const h=/^(uur|u)$/i.test(u),k=/^k/i.test(u),g=x=>String(k?rk(num(x)*f,ty):Math.max(5,Math.round(num(x)*(h?60:1)*f/5)*5)).replace('.',',');return g(a)+(b?(sep||' – ')+g(b):'')+(sp||' ')+(h?'minuten':u)})}
+function nextTr(){for(let i=0;i<8;i++){const ds=add(today,i),L=items(ds).filter(y=>!y.done&&y.id==='t');if(L.length)return{ds,x:L[0]}}return null}
+function cLvToday(ds,E){if(ds!==today||E.sc==null)return E.lv;return E.sc<=2?'herstel':E.sc<=4&&['op','gelijk'].includes(E.lv)?'rustig':E.lv}
+function cAdvice(ds,x,E){const lv=cLvToday(ds,E),f=lv===E.lv?E.f:lv==='herstel'?.6:.85,cp=(S.customPlan||{})[ds],ap=cp&&cp.coach;let w;
+ if(SIMPLE.includes(x.type))w='doe mee op je eigen niveau';
+ else if(lv==='blessure'&&x.type==='Hardlopen'&&!ap)w='niet hardlopen: ± '+fmin(Math.max(30,Math.round(estMin(x).m/5)*5))+' rustig fietsen of zwemmen';
+ else if(ap||Math.abs(f-1)<.02||!/\d/.test(x.dur||''))w=esc(x.dur||'zoals gepland');
+ else w=esc(scaleDur(x.dur,f,x.type))+` <span style="opacity:.75">(gepland ${esc(x.dur)})</span>`;
+ return`${ICON[x.type]||'🏅'} <b>${ds===today?'Vandaag':dn(ds)}: ${esc(x.title)}</b> → ${w} · zwaarte ${CRPE[lv]}/10`}
+function coachHome(){if(CM()==='uit')return'';const E=coachEval(),n=nextTr(),L=CLV[E.lv];
+ return`<div class="card" onclick="go('plan',{sub:'trainer'})" style="cursor:pointer"><div class="row"><b>🧑‍🏫 Trainer · ${L[0]} ${L[1]}</b><span class="sub">${CM()==='schema'?'past schema aan':'advies'} ›</span></div>${n?`<div class="sub" style="margin-top:4px">${cAdvice(n.ds,n.x,E)}</div>`:''}<div class="sub" style="margin-top:3px">${E.R[0]||''}</div></div>`}
+function coachSnap(){const C=S.coach||{};return{cp:JSON.stringify(S.customPlan||{}),mul:C.mul||1,ap:C.ap||null}}
+function coachClear(){if(!S.customPlan)return;S.customPlan=Object.assign({},S.customPlan);Object.keys(S.customPlan).forEach(ds=>{const c=S.customPlan[ds];if(ds>=today&&c.coach&&!(S.td[ds]||{}).done){if(c.prev)S.customPlan[ds]=c.prev;else delete S.customPlan[ds]}});if(!Object.keys(S.customPlan).length)delete S.customPlan}
+function coachApply(auto){const m=mon(today),E=coachEval(),C=S.coach=Object.assign({mul:1},S.coach),prev=coachSnap();
+ if(C.ap!==m){if(E.lv==='op')C.mul=Math.min(1.6,C.mul*1.1);else if(E.lv==='rustig')C.mul=Math.max(.6,C.mul*.9)}
+ const tf=E.lv==='herstel'||E.lv==='blessure'?.7:E.lv==='voorzichtig'?.85:1;let n=0;
+ S.customPlan=Object.assign({},S.customPlan);
+ for(let i=0;i<7;i++){const ds=add(m,i);if(ds<today||(S.td[ds]||{}).done)continue;let c=S.customPlan[ds];
+  if(c&&c.coach){if(c.prev)S.customPlan[ds]=c.prev;else delete S.customPlan[ds];c=S.customPlan[ds]}
+  const x=items(ds).find(y=>y.id==='t');if(!x||SIMPLE.includes(x.type))continue;
+  const base=c||{type:x.type,title:x.title,dur:x.dur||'',opt:x.opt};
+  if(E.lv==='blessure'&&x.type==='Hardlopen'){S.customPlan[ds]={type:'Fietsen',title:'Fietsen (i.p.v. hardlopen)',dur:Math.max(30,Math.round(estMin(x).m/5)*5)+' minuten rustig',note:'Trainer: blessure',coach:1,prev:c||null};n++;continue}
+  const f=c&&c.src==='trainer'?Math.min(1,tf):C.mul*tf;if(Math.abs(f-1)<.02||!/\d/.test(base.dur||'')&&!base.km)continue;
+  S.customPlan[ds]=Object.assign({},base,{dur:scaleDur(base.dur,f,x.type),km:base.km?String(rk(num(base.km)*f,x.type)):'',note:(base.note?base.note+' · ':'')+'Trainer: '+CLV[E.lv][1].toLowerCase(),coach:1,prev:c||null,cf:Math.round(f*100)});n++}
+ if(!Object.keys(S.customPlan).length)delete S.customPlan;
+ C.ap=m;C.last={m,n,prev};persist();render();
+ toast(n?'🧑‍🏫 Trainer heeft '+n+' training'+(n>1?'en':'')+' deze week aangepast':'🧑‍🏫 Trainer: deze week geen aanpassing nodig',n?coachUndo:null,null,9000)}
+function coachUndo(){const C=S.coach||{},p=C.last&&C.last.prev;if(!p)return;S.customPlan=JSON.parse(p.cp);if(!Object.keys(S.customPlan).length)delete S.customPlan;C.mul=p.mul;C.ap=mon(today);C.last=null;save();toast('Aanpassing van de trainer teruggedraaid. Tik op "Opnieuw berekenen" om het opnieuw te doen.')}
+function coachRe(){S.coach=Object.assign({},S.coach,{ap:null});coachApply()}
+function coachAuto(){if(CM()==='schema'&&(S.coach||{}).ap!==mon(today))coachApply(true)}
+function setCoach(v){S.opt=Object.assign({},S.opt,{coach:v});if(v==='schema'){S.coach=Object.assign({},S.coach,{ap:null});coachApply()}else{coachClear();save()}}
+function coachTab(){const E=coachEval(),m=mon(today),cm=CM(),L=CLV[E.lv],C=S.coach||{},cp=S.customPlan||{};
+ const ch=Object.keys(cp).filter(d=>d>=m&&d<add(m,7)&&cp[d].coach).sort(),up=[];
+ for(let i=0;i<7;i++){const ds=add(today,i);items(ds).forEach(x=>{if(x.id==='t'&&!x.done)up.push(`<div class="sub" style="margin:6px 0">${cAdvice(ds,x,E)}</div>`)})}
+ return`<div class="card"><h3>🧑‍🏫 Virtuele trainer</h3><div class="sub">Wat mag de trainer doen?</div><div class="sg" style="margin-top:6px">${[['advies','Alleen advies'],['schema','Schema aanpassen'],['uit','Uit']].map(q=>`<button class="${cm===q[0]?'on':''}" onclick="setCoach('${q[0]}')">${q[1]}</button>`).join('')}</div><div class="sub">${cm==='advies'?'De trainer geeft bij elke training advies over afstand of duur en hoe zwaar je moet trainen. Je schema blijft zoals het is.':cm==='schema'?'De trainer past elke maandag de trainingen van die week aan in je schema. Je kunt het altijd terugdraaien.':'De trainer staat uit.'}</div></div>
+ ${cm==='uit'?'':`<div class="card"><h3>${L[0]} Deze week: ${L[1]}</h3>${E.R.map(r=>`<div class="sub" style="margin:4px 0">${r}</div>`).join('')}${E.sc!=null?`<div class="sub" style="margin:4px 0">${rcAdv(E.sc)}</div>`:''}<div class="sub" style="margin-top:8px;font-size:12px">Zwaarte: 3–4 heel rustig · 5–6 rustig, je kunt nog praten · 7–8 pittig · 9–10 alles geven.</div></div>
+ <div class="card"><h3>Komende trainingen</h3>${up.join('')||'<div class="sub">Geen geplande trainingen in de komende 7 dagen.</div>'}</div>
+ ${cm==='schema'?`<div class="card"><h3>Aanpassingen in je schema</h3>${ch.length?ch.map(d=>{const c=cp[d],b=c.prev||tplFor(d)[(P(d).getDay()+6)%7];return`<div class="sub" style="margin:5px 0"><b>${dn(d)}:</b> ${esc(b.title||b.type)} ${esc(b.dur||'')} → ${ICON[c.type]||''} ${esc(c.title)} ${esc(c.dur||'')}</div>`}).join(''):'<div class="sub">Deze week geen aanpassingen nodig.</div>'}<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="btn" onclick="coachRe()">Opnieuw berekenen</button>${C.last&&C.last.prev&&C.last.n?`<button class="btn" onclick="coachUndo()">Terugdraaien</button>`:''}</div><div class="sub" style="margin-top:6px">Opbouw nu: ${Math.round((C.mul||1)*100)}% van je basisschema.</div></div>`:''}`}
+ <div class="card"><h3>🎯 Nieuw plan voor een doel</h3><div class="sub">Laat de trainer een opbouwschema maken, bijvoorbeeld 10 km hardlopen of 100 km fietsen op een bepaalde datum.</div><button class="btn p big" onclick="openGen()">Plan laten maken</button>${hasGen()?`<button class="btn big" onclick="delGen()">Trainersplan verwijderen</button>`:''}</div>`}
+
+/* doelplan maken */
+const GEN={Hardlopen:{long:'Lange duurloop',e:['Rustige duurloop',.55],q:['Intervallen: 5× 3 min vlot, 2 min rustig',.45],min:3},Fietsen:{long:'Lange rit',e:['Rustige rit',.5],q:['Tempo-rit',.4],min:15},Wandelen:{long:'Lange wandeling',e:['Wandeling',.5],q:['Stevige wandeling',.4],min:4},Zwemmen:{long:'Lange zwemsessie',e:['Rustig zwemmen',.6],q:['Techniek en intervallen',.5],min:.4}};
+function recentLong(ty){let b=0;for(let i=1;i<=42;i++)items(add(today,-i)).forEach(x=>{if(x.done&&x.type===ty)b=Math.max(b,num(x.km)||0)});return b||Math.round(best(ty)*.8*2)/2||0}
+function openGen(){const lg=recentLong('Hardlopen');
+ sheet(`<h3>🎯 Nieuw plan laten maken</h3><label>Sport</label><select id="g_t" onchange="genDef()">${opts(Object.keys(GEN),'Hardlopen')}</select><label>Doelafstand (km)</label><input id="g_k" type="number" step="0.5" inputmode="decimal" value="10"><label>Doeldatum</label><input id="g_d" type="date" value="${add(mon(add(today,63)),5)}"><label>Langste afstand die je nu goed aankunt (km)</label><input id="g_l" type="number" step="0.5" inputmode="decimal" value="${lg||''}" placeholder="bijv. 5"><label>Trainingsdagen</label><div class="gd">${['Ma','Di','Wo','Do','Vr','Za','Zo'].map((d,i)=>`<label><input type="checkbox" id="g_${i}" ${[1,3,5].includes(i)?'checked':''}>${d}</label>`).join('')}</div><div class="sub">De lange training komt op de laatste gekozen dag van de week. Op de andere dagen blijft je gewone schema staan; staat daar dezelfde sport, dan wordt dat een rustdag.</div><button class="btn p big" onclick="genPrev()">Bekijk plan</button><div id="g_pv"></div><button class="btn big" onclick="closeS()">Annuleren</button>`)}
+function genDef(){const t=val('g_t');document.getElementById('g_k').value=t==='Fietsen'?100:t==='Zwemmen'?2:t==='Wandelen'?20:10;document.getElementById('g_l').value=recentLong(t)||''}
+function genBuild(){const ty=val('g_t'),G=GEN[ty],goal=num(val('g_k')),gd=val('g_d'),days=[0,1,2,3,4,5,6].filter(i=>document.getElementById('g_'+i).checked);
+ if(!(goal>0)||!gd)return{err:'Vul een doelafstand en een doeldatum in.'};if(!days.length)return{err:'Kies minstens 1 trainingsdag.'};
+ const s0=P(today).getDay()===1?today:add(mon(today),7),W=Math.round((P(mon(gd))-P(s0))/6048e5)+1;if(gd<=today||W<3)return{err:'Kies een doeldatum minstens 3 weken vooruit.'};if(W>40)return{err:'Kies een doeldatum binnen 40 weken.'};
+ const peak=goal*(ty==='Zwemmen'?.9:.85),cur=Math.min(peak,Math.max(num(val('g_l'))||goal*.35,goal*.3)),nb=W-2,L=[];let warn='';
+ const gr=nb>1?Math.pow(peak/cur,1/(nb-1)):1;if(gr>1.15)warn='⚠️ Dit doel is pittig voor deze tijd: elke week ruim '+Math.round((gr-1)*100)+'% meer. Kies liever een latere datum.';
+ for(let i=0;i<nb;i++){const v=nb>1?cur*Math.pow(gr,i):peak;L.push(i%4===3?{v:v*.7,h:1}:{v})}L.push({v:peak*.7,t:1},{v:goal,g:1});
+ const plan={},weeks=[],gw=(P(gd).getDay()+6)%7;
+ L.forEach((w,i)=>{const m=add(s0,7*i),ln=[];let dd=w.g?days.filter(d=>d<gw):days.slice();const ld=w.g?gw:dd[dd.length-1];if(!w.g)dd=dd.slice(0,-1);
+  for(let d=0;d<7;d++){const ds=add(m,d);if(ds<today)continue;let e=null;
+   if(d===ld)e={type:ty,title:w.g?'🎯 Doel: '+fk(goal)+' km':G.long,dur:fk(rk(w.v,ty))+' km',note:w.h?'Herstelweek':w.t?'Laatste week rustiger (taper)':''};
+   else if(dd.includes(d)){const k=dd.indexOf(d),q=dd.length>=2&&k===0&&!w.h&&!w.g?G.q:G.e,v=Math.max(G.min,w.v*q[1]*(w.g?.6:1));e={type:ty,title:q[0],dur:fk(rk(v,ty))+' km',note:w.h?'Herstelweek':''}}
+   else if(tplFor(ds)[d].type===ty&&(!w.g||d!==gw))e={type:'Rustdag',title:'Rustdag',dur:''};
+   if(w.g&&d>gw&&tplFor(ds)[d].type===ty)e={type:'Rustdag',title:'Rustdag',dur:''};
+   if(e){e.src='trainer';plan[ds]=e;if(e.type!=='Rustdag')ln.push(['Ma','Di','Wo','Do','Vr','Za','Zo'][d]+' '+e.dur)}}
+  weeks.push(`<div class="sub" style="margin:3px 0"><b>Wk ${wk(m)}</b>${w.h?' 🔄':w.t?' 🧘':w.g?' 🎯':''}: ${ln.join(' · ')}</div>`)});
+ return{plan,weeks,warn,ty,goal,gd}}
+function genPrev(){const r=genBuild(),o=document.getElementById('g_pv');if(r.err){o.innerHTML=`<div class="sub" style="color:#c0392b;margin:8px 0">${r.err}</div>`;return}
+ o.innerHTML=`<div class="card" style="margin:10px 0"><b>${ICON[r.ty]} ${fk(r.goal)} km op ${fmt(r.gd,{day:'numeric',month:'long'})}</b>${r.warn?`<div class="sub" style="margin:6px 0">${r.warn}</div>`:''}${r.weeks.join('')}<div class="sub" style="margin-top:6px;font-size:11px">🔄 herstelweek · 🧘 rustiger week voor je doel · 🎯 doelweek</div></div><button class="btn p big" onclick="genApply()">Plan toepassen</button>`}
+function genApply(){const r=genBuild();if(r.err)return;const C=S.coach=Object.assign({},S.coach),cp=Object.assign({},S.customPlan),gp={};
+ Object.keys(r.plan).forEach(ds=>{if((S.td[ds]||{}).done)return;let o=cp[ds]||null;while(o&&(o.coach||o.src==='trainer'))o=o.coach?o.prev:null;gp[ds]=o;cp[ds]=r.plan[ds]});
+ C.gen=Object.assign({},C.gen,gp);S.customPlan=cp;closeS();V.sub='periode';
+ if(CM()==='schema'){C.ap=null;coachApply(true)}else save();toast('🎯 Trainersplan staat in je schema ('+Object.keys(gp).length+' dagen).',delGenNow,null,9000)}
+const hasGen=()=>Object.keys(S.customPlan||{}).some(d=>{const c=S.customPlan[d];return d>=today&&(c.src==='trainer'||(c.prev&&c.prev.src==='trainer'))});
+function delGenNow(){coachClear();const g=(S.coach||{}).gen||{},cp=Object.assign({},S.customPlan);Object.keys(cp).forEach(ds=>{if(ds>=today&&cp[ds].src==='trainer'&&!(S.td[ds]||{}).done){if(g[ds])cp[ds]=g[ds];else delete cp[ds]}});S.customPlan=cp;if(!Object.keys(cp).length)delete S.customPlan;if(CM()==='schema'){S.coach.ap=null;coachApply(true)}else save()}
+function delGen(){if(confirm('Het plan van de trainer verwijderen vanaf vandaag? Je gewone schema komt dan terug.')){delGenNow();toast('Trainersplan verwijderd.')}}
+
+/* ===== Persoonlijke records ===== */
+const pace=v=>{let m=Math.floor(v),s=Math.round((v-m)*60);if(s===60){m++;s=0}return m+':'+String(s).padStart(2,'0')};
+const PRN={runLong:['🏃','Langste loop',v=>fk(v)+' km'],runPace:['⚡','Snelste looptempo (vanaf 5 km)',v=>pace(v)+' /km'],rideLong:['🚴','Langste rit',v=>fk(v)+' km'],rideSpd:['💨','Snelste rit gemiddeld (vanaf 15 km)',v=>fk(Math.round(v*10)/10)+' km/u'],walkLong:['🥾','Langste wandeling',v=>fk(v)+' km'],swimLong:['🏊','Langste zwemsessie',v=>fk(v)+' km'],hm:['⛰️','Meeste hoogtemeters',v=>Math.round(v)+' m'],longTime:['⏱️','Langste training',v=>fmin(Math.round(v))]};
+const prBetter=(k,a,b)=>k==='runPace'?a<b-1e-6:a>b+1e-6;
+function prStats(){const o={},up=(k,v,ds)=>{if(v>0&&(!o[k]||prBetter(k,v,o[k].v)))o[k]={v,ds}};
+ new Set([...Object.keys(S.td),...Object.keys(S.ex)]).forEach(ds=>{if(ds>today)return;items(ds).forEach(x=>{if(!x.done)return;const km=num(x.km)||0,t=num(x.time)||0;
+  if(x.type==='Hardlopen'){up('runLong',km,ds);if(km>=5&&t>0)up('runPace',t/km,ds)}
+  if(x.type==='Fietsen'){up('rideLong',km,ds);if(km>=15&&t>0)up('rideSpd',km/(t/60),ds)}
+  if(x.type==='Wandelen')up('walkLong',km,ds);if(x.type==='Zwemmen')up('swimLong',km,ds);up('hm',num(x.hm)||0,ds);up('longTime',t,ds)})});return o}
+function prCheck(){try{const st=prStats(),old=S.pr,nw=[];if(old)for(const k in st){const o=old[k];if(o&&prBetter(k,st[k].v,o.v)&&st[k].ds>=add(today,-14))nw.push(k)}
+ const j=JSON.stringify(st);if(j!==JSON.stringify(old||null)){S.pr=st;persist()}
+ if(nw.length)toast('🏆 Persoonlijk record! '+nw.map(k=>PRN[k][1].toLowerCase()+': '+PRN[k][2](st[k].v)).join(' · '),null,null,9000)}catch(e){}}
+function prCard(){const st=prStats(),ks=Object.keys(PRN).filter(k=>st[k]);return`<div class="card"><h3>🏆 Persoonlijke records</h3>${ks.length?ks.map(k=>`<div class="row" style="padding:5px 0"><span>${PRN[k][0]} ${PRN[k][1]}</span><span style="text-align:right"><b>${PRN[k][2](st[k].v)}</b><br><small class="sub">${fmt(st[k].ds,{day:'numeric',month:'short',year:'numeric'})}</small></span></div>`).join(''):'<div class="sub">Vul bij je trainingen afstand en tijd in, dan verschijnen hier je records.</div>'}</div>`}
+
+/* ===== Schoenenteller ===== */
+const shL=()=>[...(S.shoes||[])].sort((a,b)=>a.from<b.from?-1:a.from>b.from?1:0);
+function shoeKm(sh){const L=shL(),i=L.findIndex(x=>x.id===sh.id),to=L[i+1]?L[i+1].from:'9999';let k=num(sh.base)||0;
+ new Set([...Object.keys(S.td),...Object.keys(S.ex)]).forEach(ds=>{if(ds<sh.from||ds>=to||ds>today)return;items(ds).forEach(x=>{if(x.done&&x.type==='Hardlopen')k+=num(x.km)||0})});return Math.round(k*10)/10}
+function shoeCard(){const L=shL().reverse();return`<div class="card"><h3>👟 Hardloopschoenen</h3>${L.length?L.map((s,i)=>{const k=shoeKm(s),mx=num(s.max)||700,pc=Math.min(100,k/mx*100);return`<div style="padding:6px 0;cursor:pointer" onclick="openShoe('${s.id}')"><div class="row"><span><b>${esc(s.name)}</b>${i===0?' <span class="pill">in gebruik</span>':''}</span><span class="sub">${fk(k)} / ${mx} km</span></div><div class="bar"><div style="width:${pc}%;${pc>=85?'background:#e67e22':''}"></div></div><div class="sub" style="font-size:11px">Sinds ${fmt(s.from,{day:'numeric',month:'short',year:'numeric'})}${i===0&&pc>=85?' · ⚠️ bijna aan vervanging toe':''}</div></div>`}).join(''):'<div class="sub">Voeg je schoenen toe. Alle hardloopkilometers vanaf de startdatum tellen mee.</div>'}<button class="btn" style="margin-top:8px" onclick="openShoe()">+ Nieuwe schoenen</button></div>`}
+function openShoe(id){const s=id?(S.shoes||[]).find(x=>x.id===id):{name:'',from:today,base:'',max:700};
+ sheet(`<h3>👟 ${id?'Schoenen wijzigen':'Nieuwe schoenen'}</h3><label>Naam</label><input id="s_n" value="${esc(s.name)}" placeholder="bijv. Asics Novablast"><label>In gebruik sinds</label><input id="s_f" type="date" value="${s.from}"><label>Al gelopen km (voor de startdatum)</label><input id="s_b" type="number" inputmode="decimal" value="${s.base||''}" placeholder="0"><label>Vervangen bij (km)</label><input id="s_m" type="number" inputmode="numeric" value="${s.max||700}"><div class="sub">Meestal na 600–800 km. Nieuwe schoenen nemen vanaf hun startdatum de kilometers over.</div><button class="btn p big" onclick="saveShoe(${id?`'${id}'`:'null'})">Opslaan</button>${id?`<button class="btn d big" onclick="delShoe('${id}')">Verwijderen</button>`:''}<button class="btn big" onclick="closeS()">Annuleren</button>`)}
+function saveShoe(id){const n=val('s_n').trim();if(!n){alert('Vul een naam in');return}const s={id:id||'s'+Date.now(),name:n,from:val('s_f')||today,base:num(val('s_b'))||0,max:num(val('s_m'))||700};S.shoes=(S.shoes||[]).filter(x=>x.id!==s.id).concat(s);closeS();save()}
+function delShoe(id){const e=(S.shoes||[]).find(x=>x.id===id);S.shoes=(S.shoes||[]).filter(x=>x.id!==id);closeS();save();toast('Schoenen verwijderd',()=>{S.shoes.push(e);save()})}
+function shoeWarn(){const L=shL(),s=L[L.length-1];if(!s)return'';const k=shoeKm(s),mx=num(s.max)||700;if(k<mx*.9)return'';return`<div class="card" onclick="go('goals')" style="cursor:pointer"><b>👟 ${esc(s.name)}: ${fk(k)} km gelopen</b><div class="sub">${k>=mx?'Tijd voor nieuwe schoenen!':'Bijna aan vervanging toe (bij '+mx+' km).'}</div></div>`}
+
+/* ===== Tempo-ontwikkeling ===== */
+function spark(v,lb,f,t,inv){const p=v.map((y,i)=>y==null?null:{i,y}).filter(Boolean);if(!p.length)return`<div class="sub" style="margin:8px 0"><b>${t}</b><br>Nog te weinig gegevens.</div>`;
+ const mn=Math.min(...p.map(q=>q.y)),mx=Math.max(...p.map(q=>q.y)),rg=mx-mn||1,W=320,H=100,X=i=>24+i*(W-48)/(v.length-1),Y=y=>{const r=(y-mn)/rg;return 22+(inv?r:1-r)*(H-50)};
+ let tr='';if(p.length>=2){const a=p[0],b=p[p.length-1],d=b.y-a.y,good=inv?d<0:d>0;if(Math.abs(d)>(inv?.05:.2))tr=`<span style="color:${good?'#1d8a76':'#c0392b'}">${good?'⬆️ beter':'⬇️ minder'} dan in ${lb[a.i]}: ${inv?pace(Math.abs(d))+' per km':fk(Math.round(Math.abs(d)*10)/10)+' km/u'}</span>`;else tr='Ongeveer gelijk gebleven.'}
+ return`<div style="margin:10px 0 4px"><b style="font-size:13px">${t}</b><svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block"><polyline points="${p.map(q=>X(q.i)+','+Y(q.y)).join(' ')}" fill="none" stroke="#1d8a76" stroke-width="2.5" stroke-linejoin="round"/>${p.map(q=>`<circle cx="${X(q.i)}" cy="${Y(q.y)}" r="4" fill="#1d8a76"/><text x="${X(q.i)}" y="${Y(q.y)-8}" text-anchor="middle" font-size="11" fill="currentColor">${f(q.y)}</text>`).join('')}${lb.map((l,i)=>`<text x="${X(i)}" y="${H-4}" text-anchor="middle" font-size="11" fill="currentColor" opacity=".6">${l}</text>`).join('')}</svg><div class="sub" style="font-size:12px">${tr}</div></div>`}
+function trendCard(){const t=P(today),ms=[];for(let i=5;i>=0;i--){const d=new Date(t.getFullYear(),t.getMonth()-i,1);ms.push(iso(d).slice(0,7))}const A={};ms.forEach(k=>A[k]={rk:0,rt:0,bk:0,bt:0});
+ new Set([...Object.keys(S.td),...Object.keys(S.ex)]).forEach(ds=>{const a=A[ds.slice(0,7)];if(!a||ds>today)return;items(ds).forEach(x=>{const km=num(x.km)||0,tm=num(x.time)||0;if(!x.done||!km||!tm)return;if(x.type==='Hardlopen'){a.rk+=km;a.rt+=tm}if(x.type==='Fietsen'){a.bk+=km;a.bt+=tm}})});
+ const lb=ms.map(k=>fmt(k+'-01',{month:'short'}).replace('.',''));
+ return`<div class="card"><h3>📈 Tempo-ontwikkeling</h3>${spark(ms.map(k=>A[k].rk?A[k].rt/A[k].rk:null),lb,pace,'🏃 Looptempo per km (hoger in de grafiek = sneller)',1)}${spark(ms.map(k=>A[k].bk?A[k].bk/(A[k].bt/60):null),lb,v=>fk(Math.round(v*10)/10),'🚴 Gemiddelde snelheid fietsen (km/u)',0)}<div class="sub" style="font-size:11px">Per maand, alleen trainingen waarbij je afstand én tijd hebt ingevuld.</div></div>`}
+
+/* ===== Jaaroverzicht ===== */
+function yearSum(y){const a=y+'-01-01',b=y+'-12-31',km={},M={};let n=0,mi=0,hm=0,rd=0,c=0,bs=0;
+ for(let ds=a;ds<=b&&ds<=today;ds=add(ds,1)){if(full(ds))rd++;if(isOk(ds)){c++;bs=Math.max(bs,c)}else if(!neutral(ds))c=0;
+  items(ds).forEach(x=>{if(!x.done)return;n++;const k=ds.slice(0,7);M[k]=(M[k]||0)+1;const q=num(x.km)||0;if(q)km[x.type]=(km[x.type]||0)+q;mi+=num(x.time)||0;hm+=num(x.hm)||0})}
+ const bm=Object.keys(M).sort((p,q)=>M[q]-M[p])[0];return{y,n,km,mi,hm,rd,bs,bm,bmn:bm?M[bm]:0}}
+function yearText(y){const s=yearSum(y),u=uName();let t=(u?u+' · ':'')+'Sportmaat jaaroverzicht '+y+'\n💪 '+s.n+' trainingen\n';Object.keys(s.km).forEach(k=>{t+=(ICON[k]||'🏅')+' '+fk(Math.round(s.km[k]))+' km '+k.toLowerCase()+'\n'});if(s.mi)t+='⏱️ '+Math.round(s.mi/60)+' uur getraind\n';if(s.hm)t+='⛰️ '+Math.round(s.hm)+' hoogtemeters\n';t+='☀️ '+s.rd+' dagen routine\n🔥 Langste reeks: '+s.bs+' dagen';if(s.bm)t+='\n🏅 Beste maand: '+fmt(s.bm+'-01',{month:'long'})+' ('+s.bmn+' trainingen)';return t}
+async function shareYear(y){const t=yearText(y);try{if(navigator.share){await navigator.share({title:'Sportmaat '+y,text:t});return}}catch(e){if(e&&e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);toast('Tekst gekopieerd. Plak hem in WhatsApp.')}catch(e){prompt('Kopieer deze tekst:',t)}}
+function yearCard(){const cy=P(today).getFullYear(),y=V.yr||cy,s=yearSum(y),st=(i,v,l)=>`<div class="ys"><b>${i} ${v}</b><span>${l}</span></div>`;
+ return`<div class="card"><div class="row"><h3 style="margin:0">📅 Jaaroverzicht ${y}</h3><span><button class="btn mini" onclick="V.yr=${y-1};render()">‹</button>${y<cy?`<button class="btn mini" onclick="V.yr=${y+1};render()">›</button>`:''}</span></div><div class="yg">${st('💪',s.n,'trainingen')}${Object.keys(s.km).map(k=>st(ICON[k]||'🏅',fk(Math.round(s.km[k])),'km '+k.toLowerCase())).join('')}${s.mi?st('⏱️',Math.round(s.mi/60),'uur getraind'):''}${s.hm?st('⛰️',Math.round(s.hm),'hoogtemeters'):''}${st('☀️',s.rd,'dagen routine')}${st('🔥',s.bs,'langste reeks')}${s.bm?st('🏅',fmt(s.bm+'-01',{month:'long'}),'beste maand ('+s.bmn+')'):''}</div><button class="btn" style="margin-top:10px" onclick="shareYear(${y})">📤 Deel jaaroverzicht</button></div>`}
+
+function afterSave(){badgeCheck();prCheck();try{coachAuto()}catch(e){}}
+
 /* periode: na de einddatum automatisch 6 maanden verlengen (uit te zetten in het periodescherm) */
 function addMonths(ds,n){const a=P(ds),y=a.getFullYear(),m=a.getMonth(),dim=(yy,mm_)=>new Date(yy,mm_+1,0).getDate(),last=a.getDate()===dim(y,m),t=new Date(y,m+n,1),d=last?dim(t.getFullYear(),t.getMonth()):Math.min(a.getDate(),dim(t.getFullYear(),t.getMonth()));return iso(new Date(t.getFullYear(),t.getMonth(),d))}
 let PERX='';
