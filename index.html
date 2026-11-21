@@ -1,6 +1,6 @@
 <!doctype html>
-<!-- Sportmaat v61 · 2026-11-19 -->
-<html lang="nl"><head><meta charset="utf-8"><meta name="app-version" content="v61">
+<!-- Sportmaat v62 · 2026-11-19 -->
+<html lang="nl"><head><meta charset="utf-8"><meta name="app-version" content="v62">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f2b33"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Sportmaat">
@@ -220,7 +220,7 @@ const OP=()=>Object.assign({},OPD,S.opt||{});
 function setOpt(k,v){S.opt=Object.assign({},S.opt,{[k]:v});save()}
 const THEMES=[{id:'auto',n:'Automatisch',c1:'#12395a',c2:'#000',tc:'#12395a'},{id:'zee',n:'Zee',c1:'#12395a',c2:'#1d8a76',tc:'#12395a'},{id:'blauw',n:'Blauw',c1:'#163b63',c2:'#347fc4',tc:'#163b63'},{id:'grijs',n:'Grijs',c1:'#3a3f44',c2:'#8aa0ad',tc:'#2b2f33'},{id:'zwart',n:'Zwart',c1:'#000',c2:'#1f9c85',tc:'#000000'},{id:'roze',n:'Roze',c1:'#5a1740',c2:'#e0457b',tc:'#2a0a1d'},{id:'goud',n:'Goud',c1:'#4a3a0c',c2:'#d9a521',tc:'#241c05'},{id:'paars',n:'Paars',c1:'#2d1b5a',c2:'#7b4fd0',tc:'#150d2e'},{id:'rood',n:'Rood',c1:'#5a1414',c2:'#c9302c',tc:'#2a0909'}];
 function applyTheme(){try{let id=OP().theme||'zee';if(id==='auto')id=matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'zwart':'zee';const t=THEMES.find(x=>x.id===id)||THEMES[1];document.documentElement.setAttribute('data-th',t.id);const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',t.tc)}catch(e){}}
-const APP_V='v61',DATA_V=6;
+const APP_V='v62',DATA_V=6;
 let S=DEF(),warn=false,SZ=0,lastWarn=0,RTXT='';
 const IDB=(()=>{let db=null;const open=()=>db?Promise.resolve(db):new Promise((res,rej)=>{try{const q=indexedDB.open('sportmaat',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>{db=q.result;res(db)};q.onerror=()=>rej(q.error);q.onblocked=()=>rej(new Error('blocked'))}catch(e){rej(e)}});
  const tx=(m,f)=>open().then(d=>new Promise((res,rej)=>{const t=d.transaction('kv',m),r=f(t.objectStore('kv'));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)}));
@@ -404,7 +404,10 @@ const dayKm=(ds,type)=>items(ds).reduce((s,x)=>s+(x.done&&(!type||x.type===type)
 const weekKm=(m,type)=>{let s=0;for(let i=0;i<7;i++)s+=dayKm(add(m,i),type);return Math.round(s*10)/10};
 function lastWeeks(n){let end=mon(today<=S.period.end?today:S.period.end),a=add(end,-7*(n-1));const ps=mon(S.period.start);if(ps>a&&ps<=end)a=ps;const o=[];for(let x=a;x<=end;x=add(x,7))o.push(x);return o}
 function bars(ms,f,unit){const v=ms.map(f),mx=Math.max(1,...v);return`<div class="bars">${ms.map((m,i)=>`<div class="bc"><span class="bv">${v[i]||''}</span><div class="bw"><div class="bb ${m===mon(today)?'cur':''}" style="height:${Math.round(v[i]/mx*100)}%"></div></div><span class="bl">${wk(m)}</span></div>`).join('')}</div><div class="sub" style="text-align:center">weeknummer · ${unit}</div>`}
-function rampWarn(m){const c=weekKm(m,'Hardlopen'),q=weekKm(add(m,-7),'Hardlopen');return q>0&&c>q*1.1?`<div class="card" style="background:#fff4e0;border-color:#f0c987"><b>⚠️ Snelle opbouw</b><div class="sub" style="color:#7a5a1f;margin-top:4px">Je liep ${c} km, ${Math.round((c/q-1)*100)}% meer dan de week ervoor (${q} km). Een vuistregel zegt: bouw niet meer dan ongeveer 10% per week op. Dat is geen bewezen grens, maar wel een signaal om op je lijf te letten.</div></div>`:''}
+const max4=(m,ty)=>Math.max(0,...[1,2,3,4].map(i=>weekKm(add(m,-7*i),ty)));
+function long4(ty,ds){ds=ds||today;let b=0;for(let i=1;i<=28;i++)items(add(ds,-i)).forEach(x=>{if(x.done&&x.type===ty&&plaus(x))b=Math.max(b,num(x.km)||0)});return b}
+const kmUp=d=>{const m=String(d||'').match(/(\d+(?:[.,]\d+)?)(?:\s*[–-]\s*(\d+(?:[.,]\d+)?))?\s*(km|kilometer)\b/i);return m?num(m[2]||m[1]):0};
+function rampWarn(m){const c=weekKm(m,'Hardlopen'),q=max4(m,'Hardlopen');return q>0&&c>q*1.1?`<div class="card" style="background:#fff4e0;border-color:#f0c987"><b>⚠️ Snelle opbouw</b><div class="sub" style="color:#7a5a1f;margin-top:4px">Je liep ${fk(c)} km, ${Math.round((c/q-1)*100)}% meer dan je drukste week van de 4 weken ervoor (${fk(q)} km). Een vuistregel zegt: bouw niet meer dan ongeveer 10% op ten opzichte van je afgelopen weken. Een herstelweek tussendoor telt dus niet als nieuwe basis.</div></div>`:''}
 function calScore(ds){if(ds>today)return{st:'f',got:0,tot:0};const it=items(ds),req=it.filter(x=>!x.opt),opt=it.filter(x=>x.opt&&x.done).length,swap=it.some(y=>y.id!=='t'&&y.done),tot=req.length+opt+1,got=req.filter(x=>x.done||(x.id==='t'&&swap)).length+opt+(full(ds)?1:0);return{st:got>=tot?'a':got>0?'b':(ds<today&&ds>=S.period.start&&ds>=(S.first||'')?'c':''),got,tot}}
 const calSt=ds=>calScore(ds).st;
 function rdot(ds){if(ds>today)return'';if(full(ds))return'<em class="rd yes"></em>';if(ds===today)return'<em class="rd"></em>';return ds>=S.period.start&&ds>=(S.first||'')?'<em class="rd miss"></em>':''}
@@ -791,13 +794,13 @@ function rcCard(){if(OP().rc===false)return'';const sc=rcScore(today),r=rcGet(to
 const CM=()=>OP().coach||'advies';
 function cWin(a,b){let n=0,d=0;const rp=[];if(a<(S.first||''))a=S.first;for(let ds=a;ds<b;ds=add(ds,1))items(ds).forEach(x=>{if(!x.opt||x.done)n++;if(x.done){d++;const r=num(x.rpe);if(r>0)rp.push(r)}});return{n,d,rpe:rp.length?rp.reduce((s,v)=>s+v,0)/rp.length:null}}
 function coachEval(){const m=mon(today),w=cWin(add(m,-14),m),c=w.n?w.d/w.n:null,inj=(S.inj||[]).filter(x=>x.status!=='Hersteld'),ij=inj.reduce((a,x)=>!a||x.sev>a.sev?x:a,null),
- wi=Math.round((P(m)-P(mon(S.period.start)))/6048e5),dl=wi>=0&&wi%4===3&&!hasGen(),k1=weekKm(add(m,-7),'Hardlopen'),k2=weekKm(add(m,-14),'Hardlopen'),ramp=k2>0&&k1>k2*1.1,sc=rcScore(today),R=[];let lv,f;
+ wi=Math.round((P(m)-P(mon(S.period.start)))/6048e5),dl=wi>=0&&wi%4===3&&!hasGen(),k1=weekKm(add(m,-7),'Hardlopen'),k2=max4(add(m,-7),'Hardlopen'),ramp=k2>0&&k1>k2*1.1,sc=rcScore(today),R=[];let lv,f;
  if(ij&&ij.sev>=5){lv='blessure';f=.7;R.push(`🩹 ${esc(ij.part)} (pijn ${ij.sev}/10): niet hardlopen. Kies fietsen of zwemmen en houd het licht.`)}
  else if(dl){lv='herstel';f=.7;R.push('🔄 Elke 4e week is een herstelweek: ongeveer 30% minder, zodat je lichaam sterker wordt.')}
  else if(ij){lv='voorzichtig';f=.85;R.push(`🩹 ${esc(ij.part)} (pijn ${ij.sev}/10): iets minder en rustig tempo. Stop als de pijn toeneemt.`)}
  else if((c!=null&&w.n>=2&&c<.5)||(w.rpe!=null&&w.rpe>=8)){lv='rustig';f=.85;if(c!=null&&w.n>=2&&c<.5)R.push(`📉 Afgelopen 2 weken ${w.d} van ${w.n} trainingen gedaan: eerst weer ritme opbouwen.`);if(w.rpe!=null&&w.rpe>=8)R.push(`🥵 Je trainingen voelden zwaar (gemiddeld ${fk(w.rpe)}/10): even gas terug.`)}
  else if(c!=null&&w.n>=2&&c>=.85&&(w.rpe==null||w.rpe<=6.5)&&!ramp){lv='op';f=1.1;R.push(`📈 ${w.d} van ${w.n} trainingen gedaan${w.rpe!=null?' en het voelde goed ('+fk(w.rpe)+'/10)':''}: je kunt ongeveer 10% meer aan.`)}
- else{lv='gelijk';f=1;if(ramp)R.push('⚠️ Je kilometers stegen vorige week al flink: deze week gelijk houden.');else if(c!=null&&w.n)R.push(`✅ ${w.d} van ${w.n} trainingen gedaan: houd dit niveau vast.`);else R.push('Nog weinig gegevens: volg je plan en vul na elke training in hoe zwaar het was.')}
+ else{lv='gelijk';f=1;if(ramp)R.push(`⚠️ Vorige week liep je ${fk(k1)} km, meer dan 10% boven je drukste week van de 4 weken ervoor (${fk(k2)} km): deze week gelijk houden.`);else if(c!=null&&w.n)R.push(`✅ ${w.d} van ${w.n} trainingen gedaan: houd dit niveau vast.`);else R.push('Nog weinig gegevens: volg je plan en vul na elke training in hoe zwaar het was.')}
  {const dv=[];for(let i=1;i<=7;i++){const d=rcDev(rcGet(add(today,-i)));if(d!=null)dv.push(d)}if(dv.length>=3){const a=dv.reduce((s,v)=>s+v,0)/dv.length,nm=RCS[OP().rcs||'hc'];if(a<50&&(lv==='op'||lv==='gelijk')){lv='rustig';f=.85;R.unshift(`📱 Je ${nm} was de afgelopen week laag (gemiddeld ${Math.round(a)}): rustiger aan.`)}else if(a<50)R.push(`📱 Je ${nm} was de afgelopen week laag (gemiddeld ${Math.round(a)}).`);else if(a>=70&&lv==='op')R.push(`📱 Je ${nm} was goed (gemiddeld ${Math.round(a)}).`)}}
  {const Ld=loadAcwr();if(Ld.r!=null&&Ld.r>1.5&&(lv==='op'||lv==='gelijk')){lv='rustig';f=.85;R.unshift(`📊 Je belasting is de laatste week ${fk(Math.round(Ld.r*10)/10)}× je gemiddelde: te snel opgebouwd, rustiger aan.`)}else if(Ld.r!=null&&Ld.r>1.3&&lv==='op'){lv='gelijk';f=1;R.unshift(`📊 Je belasting steeg al flink (${fk(Math.round(Ld.r*10)/10)}× je gemiddelde): deze week gelijk houden.`)}
   let el=0;for(let i=0;i<5;i++){const h=rhrInfo(add(today,-i));if(h&&h.base!=null&&h.d>=5)el++}if(el>=3&&(lv==='op'||lv==='gelijk')){lv='rustig';f=.85;R.unshift('❤️ Je rusthartslag is al een paar dagen verhoogd: mogelijk ben je moe of word je ziek. Rustiger aan.')}
@@ -816,6 +819,7 @@ function cAdvice(ds,x,E){const lv=cLvToday(ds,E),cp=(S.customPlan||{})[ds],ap=cp
  if(isRace(cp)||isRace(x))return`${ICON[x.type]||'🏅'} <b>${ds===today?'Vandaag':dn(ds)}: ${esc(x.title)}</b> → ${esc(x.dur||'')} · 🎯 dit is je doel: geniet ervan en start rustig!`;
  if(SIMPLE.includes(x.type))w='doe mee op je eigen niveau';
  else if(lv==='blessure'&&x.type==='Hardlopen'&&!ap)w='niet hardlopen: ± '+fmin(Math.max(30,Math.round(estMin(x).m/5)*5))+' rustig fietsen of zwemmen';
+ else if(kmUp(x.dur)&&long4(x.type)>0&&kmUp(ap?x.dur:scaleDur(x.dur,f,x.type))>long4(x.type)*1.1+.01){const L4=long4(x.type),cap=rk(L4*1.1,x.type);w=`max ± ${fk(cap)} km <span style="opacity:.75">(gepland ${esc(x.dur)}; je langste ${x.type==='Hardlopen'?'loop':x.type==='Fietsen'?'rit':'training'} van de afgelopen 4 weken was ${fk(L4)} km, bouw ± 10% daarboven op)</span>`}
  else if(ap||Math.abs(f-1)<.02||!/\d/.test(x.dur||''))w=esc(x.dur||'zoals gepland');
  else w=esc(scaleDur(x.dur,f,x.type))+` <span style="opacity:.75">(gepland ${esc(x.dur)})</span>`;
  const lim=avail(ds);if(lim&&!SIMPLE.includes(x.type)&&/\d/.test(x.dur||'')){const ff=ap?1:f,est=estMin(x).m*ff;if(est>lim+5)w+=` · ⏳ je hebt ${lim} min: kort in tot ± ${esc(scaleDur(x.dur,ff*lim/est,x.type))}`}
@@ -833,7 +837,7 @@ function coachApply(auto){const m=mon(today),E=coachEval(),C=S.coach=Object.assi
   const x=items(ds).find(y=>y.id==='t');if(!x||SIMPLE.includes(x.type))continue;
   const base=c||{type:x.type,title:x.title,dur:x.dur||'',opt:x.opt};if(isRace(base)||isRace(x))continue;
   if(E.lv==='blessure'&&x.type==='Hardlopen'){S.customPlan[ds]={type:'Fietsen',title:'Fietsen (i.p.v. hardlopen)',dur:Math.max(30,Math.round(estMin(x).m/5)*5)+' minuten rustig',note:'Trainer: blessure',coach:1,prev:c||null};n++;continue}
-  let f=c?Math.min(1,tf):C.mul*tf;const lim=avail(ds);if(lim){const est=estMin(Object.assign({},x,{dur:base.dur})).m*f;if(est>lim+5)f*=lim/est}if(Math.abs(f-1)<.02||!/\d/.test(base.dur||'')&&!base.km)continue;
+  let f=c?Math.min(1,tf):C.mul*tf;{const up=kmUp(base.dur),L4=long4(x.type);if(up&&L4>0&&up*f>L4*1.1)f=L4*1.1/up}const lim=avail(ds);if(lim){const est=estMin(Object.assign({},x,{dur:base.dur})).m*f;if(est>lim+5)f*=lim/est}if(Math.abs(f-1)<.02||!/\d/.test(base.dur||'')&&!base.km)continue;
   S.customPlan[ds]=Object.assign({},base,{dur:scaleDur(base.dur,f,x.type),km:base.km?String(rk(num(base.km)*f,x.type)):'',note:(base.note?base.note+' · ':'')+'Trainer: '+CLV[E.lv][1].toLowerCase(),coach:1,prev:c||null,cf:Math.round(f*100)});n++}
  if(!Object.keys(S.customPlan).length)delete S.customPlan;
  C.ap=m;C.last={m,n,prev};persist();render();
