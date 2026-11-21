@@ -220,7 +220,7 @@ const OP=()=>Object.assign({},OPD,S.opt||{});
 function setOpt(k,v){S.opt=Object.assign({},S.opt,{[k]:v});save()}
 const THEMES=[{id:'auto',n:'Automatisch',c1:'#12395a',c2:'#000',tc:'#12395a'},{id:'zee',n:'Zee',c1:'#12395a',c2:'#1d8a76',tc:'#12395a'},{id:'blauw',n:'Blauw',c1:'#163b63',c2:'#347fc4',tc:'#163b63'},{id:'grijs',n:'Grijs',c1:'#3a3f44',c2:'#8aa0ad',tc:'#2b2f33'},{id:'zwart',n:'Zwart',c1:'#000',c2:'#1f9c85',tc:'#000000'},{id:'roze',n:'Roze',c1:'#5a1740',c2:'#e0457b',tc:'#2a0a1d'},{id:'goud',n:'Goud',c1:'#4a3a0c',c2:'#d9a521',tc:'#241c05'},{id:'paars',n:'Paars',c1:'#2d1b5a',c2:'#7b4fd0',tc:'#150d2e'},{id:'rood',n:'Rood',c1:'#5a1414',c2:'#c9302c',tc:'#2a0909'}];
 function applyTheme(){try{let id=OP().theme||'zee';if(id==='auto')id=matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'zwart':'zee';const t=THEMES.find(x=>x.id===id)||THEMES[1];document.documentElement.setAttribute('data-th',t.id);const m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',t.tc)}catch(e){}}
-const APP_V='v65',DATA_V=6;
+const APP_V='v67',DATA_V=6;
 let S=DEF(),warn=false,SZ=0,lastWarn=0,RTXT='';
 const IDB=(()=>{let db=null;const open=()=>db?Promise.resolve(db):new Promise((res,rej)=>{try{const q=indexedDB.open('sportmaat',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>{db=q.result;res(db)};q.onerror=()=>rej(q.error);q.onblocked=()=>rej(new Error('blocked'))}catch(e){rej(e)}});
  const tx=(m,f)=>open().then(d=>new Promise((res,rej)=>{const t=d.transaction('kv',m),r=f(t.objectStore('kv'));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)}));
@@ -645,12 +645,12 @@ function wxDay(ds){const W=wxData();if(!W)return null;const H=W.h;let lo=99,hi=-
 const wxDayTxt=d=>`${wxIc(d.code)} ${Math.round(d.lo)}–${Math.round(d.hi)}° · ${d.sum>=.1?mm(d.sum)+' regen':'droog'} · wind ${BFT(d.w)} Bft`;
 function wxCandsAll(from,n){const o=[];for(let i=0;i<n;i++){const ds=add(from,i);items(ds).forEach(x=>{if(!x.done)o.push({ds,x})})}return o}
 
-const pdx=x=>x.dur&&/\d/.test(x.dur)?' '+esc(String(x.dur).split(' · ')[0]):'';
+const pdx=x=>{const ps=String(x.dur||'').split(' · ').map(t=>t.trim()).filter(Boolean);let t=ps.find(q=>/\d\s*(km|kilometer|min|uur|u\b)/i.test(q))||ps.find(q=>/\d/.test(q))||'';if(!t&&x.km&&!x.done&&num(x.km)>0)t=String(x.km).replace('.',',')+' km';return t?' '+esc(t):''};
 function wxHomeHtml(){if(!wxOn()||!wxData())return'';let h='',n=0;
  for(const c of wxCandsAll(today,7)){const dl=c.ds===today?'Vandaag':dn(c.ds);
   if(!OUTD.includes(c.x.type)){const d=wxDay(c.ds);if(!d)continue;h+=`<div class="wl"><b>${ICON[c.x.type]||'🏅'} ${dl}: ${esc(c.x.title||c.x.type)}${pdx(c.x)}${c.x.opt?' (optioneel)':''}</b><span>${wxDayTxt(d)}</span></div>`;if(++n>=1)break;continue}
   const r=wxSlot(c.ds,c.x);if(!r||r.late)continue;
-  const tn=c.x.type.toLowerCase()+pdx(c.x)+(c.x.opt?' (optioneel)':'');h+=`<div class="wl"><b>${r.k==='wet'?'☔ '+dl+': geen droog tijdvak voor '+tn:ICON[c.x.type]+' '+dl+': '+tn+' om '+wxRange(r)}</b><span>${r.k==='wet'?'minst nat '+wxRange(r)+' · '+wxTxt(r):wxTxt(r)+(r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):'')}</span><span>${wxKled(r,c.x.type)}</span>${wxDur(r)}</div>`;
+  const tn=c.x.type.toLowerCase()+(pdx(c.x)||(r.min?' ± '+fmin(r.min):''))+(c.x.opt?' (optioneel)':'');h+=`<div class="wl"><b>${r.k==='wet'?'☔ '+dl+': geen droog tijdvak voor '+tn:ICON[c.x.type]+' '+dl+': '+tn+' om '+wxRange(r)}</b><span>${r.k==='wet'?'minst nat '+wxRange(r)+' · '+wxTxt(r):wxTxt(r)+(r.run?' · droog van '+hh(r.run[0])+' tot '+hh(r.run[1]):'')}</span><span>${wxKled(r,c.x.type)}</span>${wxDur(r)}</div>`;
   if(++n>=1)break}
  return h+wxSwapHtml()}
 function wxWeekHtml(m){if(!wxOn())return'';const W=wxData();
